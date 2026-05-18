@@ -1,39 +1,413 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Generador de Prompts para SUNO</title>
-<style>
-:root{--y:#ffca28;--o:#ff8a00;--c:#ff5a1f;--p:#ff4f6d;--m:#ff3cac;--g:rgba(255,255,255,.16);--gb:rgba(255,255,255,.25);--dg:rgba(0,0,0,.24);--do:rgba(0,0,0,.32)}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;background:radial-gradient(circle at 12% 8%,rgba(255,202,40,.95) 0%,rgba(255,138,0,.9) 20%,transparent 38%),radial-gradient(circle at 85% 18%,rgba(255,60,172,.75) 0%,rgba(255,79,109,.55) 24%,transparent 42%),radial-gradient(circle at 50% 95%,rgba(255,90,31,.9) 0%,rgba(255,60,172,.65) 32%,transparent 55%),linear-gradient(135deg,#ffb000 0%,#ff7a18 30%,#ff4f6d 66%,#ff3cac 100%);overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.18) 0%,transparent 18%),radial-gradient(circle at 72% 62%,rgba(255,255,255,.12) 0%,transparent 22%);filter:blur(55px);z-index:0}body:after{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;opacity:.2;z-index:0}.blob{position:fixed;border-radius:999px;filter:blur(60px);pointer-events:none;z-index:1}.one{top:-96px;left:-96px;width:288px;height:288px;background:rgba(255,202,40,.55)}.two{top:96px;right:-96px;width:384px;height:384px;background:rgba(255,60,172,.45)}.three{bottom:0;left:33%;width:320px;height:320px;background:rgba(255,90,31,.45)}.page{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:32px}header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}.brand-pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(18px);box-shadow:0 12px 40px rgba(255,60,60,.25);margin-bottom:16px;font-size:14px;font-weight:800}.title-row{display:flex;align-items:center;gap:16px}.logo-box{width:80px;height:80px;border-radius:26px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);padding:6px;backdrop-filter:blur(18px);box-shadow:0 18px 50px rgba(120,28,0,.28);overflow:hidden;flex:0 0 auto}.logo{display:block;width:100%;height:100%;object-fit:cover;border-radius:20px;user-select:none;-webkit-user-drag:none}h1{margin:0;font-size:clamp(32px,5vw,64px);line-height:.95;font-weight:950;letter-spacing:-.045em;text-shadow:0 8px 30px rgba(110,20,0,.35)}.subtitle{max-width:720px;color:rgba(255,255,255,.88);line-height:1.6;margin:14px 0 0;font-size:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}button{border:0;cursor:pointer;color:#fff;font-weight:800;font-family:inherit;transition:transform .22s,filter .22s,background .22s}button:hover{transform:translateY(-1px)}.btn{min-height:44px;padding:12px 16px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.btn-secondary{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(16px);box-shadow:0 14px 38px rgba(100,30,0,.25)}.btn-primary{background:linear-gradient(90deg,var(--y),var(--c),var(--m));box-shadow:0 18px 50px rgba(255,60,80,.42)}.btn-primary:hover{filter:brightness(1.1)}.grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}.card{background:var(--g);border:1px solid var(--gb);backdrop-filter:blur(24px);border-radius:32px;box-shadow:0 24px 80px rgba(115,28,0,.28);outline:1px solid rgba(255,255,255,.1);padding:24px}.card-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}.icon-box{width:44px;height:44px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,var(--y),var(--o),var(--c));box-shadow:0 12px 30px rgba(255,122,24,.42);flex:0 0 auto}.icon-box.alt{background:linear-gradient(135deg,var(--c),var(--p),var(--m));box-shadow:0 12px 30px rgba(255,60,172,.36)}.icon-box.full{background:linear-gradient(135deg,var(--y),var(--o),var(--m));box-shadow:0 12px 30px rgba(255,138,0,.35)}.card-title h2,.chip-editor h3{margin:0;font-size:20px;line-height:1.2}.card-title p,.chip-editor p{margin:4px 0 0;color:rgba(255,255,255,.72);font-size:14px;line-height:1.45}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}label{display:grid;gap:8px;min-width:0}label span{color:rgba(255,255,255,.82);font-size:14px}input,select,textarea{width:100%;color:#fff;background:var(--dg);border:1px solid rgba(255,255,255,.24);border-radius:18px;padding:12px 14px;font-family:inherit;font-size:15px;outline:none;backdrop-filter:blur(16px);box-shadow:inset 0 0 16px rgba(0,0,0,.1);transition:box-shadow .18s,border-color .18s}textarea{resize:vertical;min-height:84px}input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45)}input:focus,select:focus,textarea:focus{border-color:var(--y);box-shadow:0 0 0 3px rgba(255,202,40,.25),inset 0 0 16px rgba(0,0,0,.1)}option{background:#7a240b;color:#fff}.chip-section{display:grid;gap:16px;margin-top:16px}.chip-editor{border-radius:32px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.2);padding:16px;backdrop-filter:blur(18px)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;min-height:31px}.chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);font-size:14px;box-shadow:0 3px 10px rgba(0,0,0,.1)}.chip button{width:20px;height:20px;border-radius:999px;background:transparent;padding:0;font-size:16px;line-height:1}.chip button:hover{background:rgba(255,255,255,.2);transform:none}.chip-input-row{display:flex;gap:8px}.chip-add{width:48px;border-radius:18px;background:linear-gradient(90deg,var(--y),var(--o),var(--c));box-shadow:0 12px 30px rgba(255,122,24,.35);font-size:22px;flex:0 0 auto}.output-box{min-height:670px;white-space:pre-wrap;color:rgba(255,255,255,.96);line-height:1.55;font-size:14px;background:var(--do);border:1px solid rgba(255,255,255,.24);border-radius:32px;padding:20px;backdrop-filter:blur(18px);box-shadow:inset 0 0 18px rgba(0,0,0,.2);overflow:hidden}.fine-card{margin-top:24px}.fine-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.toast{position:fixed;right:22px;bottom:22px;z-index:20;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.2);color:#fff;padding:12px 16px;border-radius:16px;backdrop-filter:blur(12px);opacity:0;transform:translateY(12px);transition:opacity .22s,transform .22s;pointer-events:none;font-weight:700}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:980px){.grid-main{grid-template-columns:1fr}header{flex-direction:column;align-items:stretch}.actions{justify-content:flex-start}}@media(max-width:720px){.page{padding:20px}.title-row{align-items:flex-start;flex-direction:column}.form-grid,.form-grid.three,.fine-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:26px}.logo-box{width:68px;height:68px}.chip-input-row{flex-direction:column}.chip-add{width:100%;height:44px}}
-</style>
-</head>
-<body>
-<div class="blob one"></div><div class="blob two"></div><div class="blob three"></div>
-<main class="page">
-<header>
-<section>
-<div class="brand-pill"><span>✦</span><span>SUNO Prompt Lab</span></div>
-<div class="title-row"><div class="logo-box"><img id="brandLogoMain" class="logo" alt="SUNO" /></div><h1>Generador de prompts para SUNO</h1></div>
-<p class="subtitle">Define un género principal y agrega por separado los géneros a fusionar y los instrumentos que quieres usar. La interfaz queda en español y el prompt final sale en inglés.</p>
-</section>
-<div class="actions"><button class="btn btn-secondary" id="resetBtn" type="button">↻ Preset Boom Bap</button><button class="btn btn-primary" id="copyBtn" type="button">⧉ Copiar prompt</button></div>
-</header>
-<section class="grid-main">
-<div class="card"><div class="card-title"><div class="icon-box">☰</div><div><h2>Variables principales</h2><p>Primero eliges el género principal. Luego decides si quieres percusión, fusiones, instrumentos y una personalización adicional escrita por ti.</p></div></div><div class="form-grid" id="selectFields"></div><div class="form-grid three"><label><span>BPM opcional</span><input id="bpm" placeholder="Ej: 86" /></label><label><span>Tonalidad opcional</span><input id="key" placeholder="Ej: F minor" /></label><label><span>Año / época</span><input id="eraYear" placeholder="Ej: 1996, 2003, 2012" /></label></div><div class="chip-section"><div class="chip-editor"><h3>Géneros a fusionar</h3><p>Son influencias secundarias. No reemplazan el género principal; solo orientan el color musical.</p><div class="chips" id="fusionGenresChips"></div><div class="chip-input-row"><input id="newFusionGenre" placeholder="Ej: Neo Soul, Gospel, Jazz, Drill, Afrobeat" /><button class="chip-add" id="addFusionGenre" type="button">+</button></div></div><div class="chip-editor"><h3>Instrumentos o sonidos a usar</h3><p>Agrega instrumentos, texturas o capas que SUNO debería intentar incluir en la extensión.</p><div class="chips" id="instrumentsChips"></div><div class="chip-input-row"><input id="newInstrument" placeholder="Ej: contrabajo, saxofón, moog bass, strings, vinyl crackle" /><button class="chip-add" id="addInstrument" type="button">+</button></div></div><div class="chip-editor"><h3>Personalización adicional</h3><p>Escribe cualquier indicación especial que quieras añadir al prompt.</p><textarea id="customInstruction" rows="4" placeholder="Ej: quiero que haya un solo de violín virtuoso en una sección breve, musical y coherente con el loop original"></textarea></div></div></div>
-<div class="card"><div class="card-title"><div class="icon-box alt">✦</div><div><h2>Prompt final en inglés</h2><p>Salida lista para copiar y pegar en SUNO.</p></div></div><div class="output-box"><div id="promptOutput"></div></div></div>
-</section>
-<section class="card fine-card"><div class="card-title"><div class="icon-box full">♫</div><div><h2>Detalle fino del prompt</h2><p>Aquí defines estructura, atmósfera, emoción, restricciones, preservación del loop, objetivo de los stems y cualquier personalización especial.</p></div></div><div class="fine-grid" id="textareaFields"></div></section>
-</main>
-<div class="toast" id="toast">Prompt copiado</div>
-<script>
-const SUNO_LOGO_DATA="data:image/webp;base64,UklGRmwDAABXRUJQVlA4IGADAABwEwCdASpgAGAAPp1In0qlpKMnKduY+OATiWgAwroNWd6Tfm/yM9ou2+D6Ln5YXSX52D+5/tHrEH7AezB0vX+qYPhVe07QVggxS3E96OpCJBJYXhYaHZDT19wNwIiXIjZ3nrqGLfqWEe3X3SlDg1GjHqO/kYsJ9hYAcBpF/VKiJAqCoagRphSAichV+MjwjnS4gvBr8bkOTSxMNfkZZW632JpeAAD+7unf+3Z/VofXZ/oof5Z7zD3eqO8UAqmpFg5jiUwW+hp/6WFi5M2bd4xl5FyxZjSnt1ycip9d+sKSRrkeLxyLT66/vYEK8ZPxKLfzxMplSCMl45Ntq2HgLLOcGlWpEqGs1DofrC6a8LN2LJsGqmB0zH/Kan4P1hvA5yScj0gJV/kSo7PyqUUG9MQ03aH/O1F3E12BZqbsi1GosBZvHBc11TGP+JP0wgueEwMfOX9Pd3JsmpfHYWdrITHpMFE5R0NGVlsNYFTfcKZvTQqGRI80Ndp/F+/ENihYzaOLuf6StfUyJBiHa5f48EQGJGH6/NDrAAD4t1gwBXr1KtMNQtlS08u2/BLrxdXwqTItSxZnVxLi0Da63vfr/fHiPa24Lr8kShyuYtBsS3XYFmczsJ2QAcRTHSWaqNJCq8F3hwXmrAv+GqouZRo+vvx78yAqljBSZNJdNkWt9Q9ux+l/RwXuyzMp/rHdygO42DzD7oJ3jT3fUEQ7z5fcNNQgXci+/lrfHO8ylLLn8qUB2iyo5dVfNaC7Nnd3BprW7o+lIb45E1uhaAjUZmEdh77lJvw2WNehc05RO/33b4oBy1hoYp+wnvLmxshuRE2m29G73D8ChYHnaXBWKQBk9NEY1BURTcJ4X7s27bsTeof3TMAuLD2mvrW5JdWQvgk4/B5jdEW6zwuURxWKR1j+Wtkybb6PuDXDYYm4zgz5wwOrK6G5fkmqXyFInoRrquLA2dBHVL8K500DdmEAFe6h9rwdMJ9q/UNTRpT4aX/pbr+rAbiqdyHVYR8tlKnXSsqW6q4sLNNX/bIMv7X4E6ZsJ7csEqcLdF0PDbTnIXuACNC/vPu/FaS3HfwUrf7M0vQLU6MTCpb/pVDabFktQQHm81BM59J+yzaLQby2BwRgew/HPkaqHiiy9KFLNVxU9/WgAAA=";
-const initialState={mode:"Extend",model:"v5.5",percussionMode:"Con percusión",mainUse:"Extender un loop propio para extraer stems y reinsertarlos en FL Studio",genre:"Boom Bap",fusionGenres:["Soul","Jazz Rap","Lo-fi Hip Hop"],instruments:["Rhodes eléctrico","bajo cálido","batería con swing","piano melancólico","textura de vinilo"],subStyle:"sample-based, underground, soulful, dusty",bpm:"",key:"",eraYear:"1996",atmosphere:"nocturna, cinematográfica, underground, con textura analógica",emotionIntent:"nostalgia, tensión elegante, introspección y crudeza callejera",mood:"oscuro, nostálgico, callejero, elegante",referenceEnergy:"medio",audioInfluence:"alto",styleInfluence:"medio-bajo",creativity:"controlada",structure:"intro corta, verso, hook, variación, outro",preserve:"groove, BPM, tonalidad, swing, sample principal y atmósfera original",addElements:"bajo cálido, fills de batería, texturas vinilo, pads sutiles, chops vocales ambientales",avoid:"EDM, pop comercial, voces exageradas, cambios bruscos de tonalidad, drums genéricos, sonido demasiado IA",stemGoal:"rescatar bajos alternativos, ambientes, fills, melodías secundarias y texturas",vocalOption:"Solo instrumental",mixDirection:"mezcla moderna limpia con textura clásica cruda",outputLength:"Extensión corta a media",customInstruction:"",notes:"Debe sonar como material sampleable, no como canción final."};let state=JSON.parse(JSON.stringify(initialState));
-const translateValue=v=>({"muy alto":"very high",alto:"high",medio:"medium",bajo:"low","medio-bajo":"medium-low","muy controlada":"very controlled",controlada:"controlled",media:"medium",experimental:"experimental",agresivo:"aggressive",cinematográfico:"cinematic","Solo instrumental":"instrumental only","Solo chops vocales sutiles":"subtle vocal chops only","Voz de referencia para hook":"hook reference vocal","Voz guía rapeada":"rap guide vocal","Solo texturas vocales de fondo":"background vocal textures only","Extensión corta":"short extension","Extensión corta a media":"short-to-medium extension","Arreglo completo":"full arrangement","Solo sección de hook":"hook section only","Solo intro/outro":"intro/outro only"}[v]||v);
-const selectFields=[{key:"mode",label:"Modo SUNO",options:["Extend","Cover","Create","Remix / Variation"]},{key:"model",label:"Modelo",options:["v5.5","v5","Custom Model"]},{key:"genre",label:"Género principal",options:["Boom Bap","Boom Trap","Trap","Detroit","Lo-fi Hip Hop","R&B","Soulful Rap","Experimental Hip Hop"]},{key:"percussionMode",label:"Percusión",options:["Con percusión","Sin percusión / solo melodía"]},{key:"audioInfluence",label:"Influencia del audio",options:["muy alto","alto","medio","bajo"]},{key:"styleInfluence",label:"Influencia del estilo",options:["alto","medio","medio-bajo","bajo"]},{key:"creativity",label:"Creatividad",options:["muy controlada","controlada","media","experimental"]},{key:"referenceEnergy",label:"Energía",options:["bajo","medio","alto","agresivo","cinematográfico"]},{key:"vocalOption",label:"Dirección vocal",options:["Solo instrumental","Solo chops vocales sutiles","Voz de referencia para hook","Voz guía rapeada","Solo texturas vocales de fondo"]},{key:"outputLength",label:"Duración sugerida",options:["Extensión corta","Extensión corta a media","Arreglo completo","Solo sección de hook","Solo intro/outro"]}];
-const textareaFields=[{key:"mainUse",label:"Objetivo de uso"},{key:"subStyle",label:"Subestilo / textura"},{key:"mood",label:"Mood / color musical"},{key:"atmosphere",label:"Atmósfera"},{key:"emotionIntent",label:"Emoción que se quiere transmitir"},{key:"structure",label:"Estructura deseada"},{key:"preserve",label:"Qué debe preservar del loop"},{key:"addElements",label:"Qué puede agregar"},{key:"avoid",label:"Qué debe evitar"},{key:"stemGoal",label:"Objetivo al extraer stems"},{key:"mixDirection",label:"Dirección de mezcla"},{key:"notes",label:"Notas finales"}];
-function esc(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}function renderSelects(){selectFieldsEl.innerHTML=selectFields.map(f=>`<label><span>${f.label}</span><select id="${f.key}">${f.options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join("")}</select></label>`).join("");selectFields.forEach(f=>{const e=document.getElementById(f.key);e.value=state[f.key];e.onchange=ev=>{state[f.key]=ev.target.value;renderPrompt()}})}function renderTextareas(){textareaFieldsEl.innerHTML=textareaFields.map(f=>`<label><span>${f.label}</span><textarea id="${f.key}" rows="3"></textarea></label>`).join("");textareaFields.forEach(f=>{const e=document.getElementById(f.key);e.value=state[f.key];e.oninput=ev=>{state[f.key]=ev.target.value;renderPrompt()}})}function renderChips(key,id){const c=document.getElementById(id);c.innerHTML=state[key].length?state[key].map((item,i)=>`<span class="chip">${esc(item)}<button type="button" data-key="${key}" data-i="${i}">×</button></span>`).join(""):`<span style="color:rgba(255,255,255,.55);font-size:14px">Sin elementos agregados.</span>`;c.querySelectorAll("button").forEach(b=>b.onclick=()=>{state[b.dataset.key].splice(+b.dataset.i,1);renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");renderPrompt()})}function addChip(key,inputId,containerId){const i=document.getElementById(inputId),v=i.value.trim();if(!v)return;if(!state[key].includes(v))state[key].push(v);i.value="";renderChips(key,containerId);renderPrompt()}function getPrompt(){const bpm=state.bpm?` Keep the tempo around ${state.bpm} BPM.`:" Keep the original tempo.",key=state.key?` Keep the key around ${state.key}.`:" Preserve the original key and harmonic feeling.",era=state.eraYear.trim()?` Era reference: make the sound, arrangement choices, textures, groove, and production attitude feel inspired by music from around ${state.eraYear}, without copying any specific artist or song.`:" Era reference: keep the sound timeless, without forcing a specific decade.",atm=state.atmosphere.trim()?` Atmosphere: ${state.atmosphere}.`:" Atmosphere: keep it natural and coherent with the uploaded audio.",emo=state.emotionIntent.trim()?` Emotional intention: transmit ${state.emotionIntent}.`:" Emotional intention: preserve the emotional feeling of the uploaded loop.",fusion=state.fusionGenres.length?` Fuse the main genre with these secondary influences: ${state.fusionGenres.join(", ")}.`:" Keep the arrangement focused on the main genre without additional genre fusion.",inst=state.instruments.length?` Preferred instruments and textures to include: ${state.instruments.join(", ")}.`:" Do not force additional instruments unless they naturally fit the uploaded loop.",perc=state.percussionMode==="Sin percusión / solo melodía"?"Percussion direction: no drums, no percussion, no rhythmic drum patterns. Focus only on melody, harmony, musical texture, atmosphere, bass movement if needed, and sampleable melodic layers.":"Percussion direction: percussion and drums are allowed, but they must support the uploaded loop tastefully without overpowering it.",custom=state.customInstruction.trim()?`Custom request: ${state.customInstruction}. Integrate this naturally and musically without making it feel forced or disconnected from the uploaded loop.`:"Custom request: no extra custom element.";return`SUNO Mode: ${state.mode} / Model: ${state.model}\n\nGoal: ${state.mainUse}.\n\nMain genre: ${state.genre}.\n${fusion}\n\nExtend this uploaded audio into a ${state.genre} beat with a ${state.subStyle} direction. Preserve the ${state.preserve}.${bpm}${key} The energy should be ${translateValue(state.referenceEnergy)}, with a ${state.mood} mood. ${era} ${atm} ${emo}\n\nSuggested structure: ${state.structure}.\n\n${perc}\n\n${custom}\n\nAdd only tasteful elements: ${state.addElements}. ${inst} Vocal direction: ${translateValue(state.vocalOption)}. Mix direction: ${state.mixDirection}. Suggested length: ${translateValue(state.outputLength)}.\n\nAudio influence: ${translateValue(state.audioInfluence)}. Style influence: ${translateValue(state.styleInfluence)}. Creativity: ${translateValue(state.creativity)}.\n\nAvoid: ${state.avoid}.\n\nStem goal: ${state.stemGoal}.\n\nFinal notes: ${state.notes}`}function renderPrompt(){promptOutput.textContent=getPrompt()}function resetApp(){state=JSON.parse(JSON.stringify(initialState));renderSelects();renderTextareas();["bpm","key","eraYear","customInstruction"].forEach(id=>document.getElementById(id).value=state[id]);renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");renderPrompt()}async function copyPrompt(){try{await navigator.clipboard.writeText(getPrompt())}catch(e){const t=document.createElement("textarea");t.value=getPrompt();document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1500)}
-const selectFieldsEl=document.getElementById("selectFields"),textareaFieldsEl=document.getElementById("textareaFields"),promptOutput=document.getElementById("promptOutput"),toast=document.getElementById("toast");document.getElementById("brandLogoMain").src=SUNO_LOGO_DATA;renderSelects();renderTextareas();["bpm","key","eraYear","customInstruction"].forEach(id=>{const e=document.getElementById(id);e.value=state[id];e.oninput=ev=>{state[id]=ev.target.value;renderPrompt()}});renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");document.getElementById("addFusionGenre").onclick=()=>addChip("fusionGenres","newFusionGenre","fusionGenresChips");document.getElementById("addInstrument").onclick=()=>addChip("instruments","newInstrument","instrumentsChips");[["newFusionGenre","fusionGenres","fusionGenresChips"],["newInstrument","instruments","instrumentsChips"]].forEach(([input,key,container])=>document.getElementById(input).onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();addChip(key,input,container)}});document.getElementById("copyBtn").onclick=copyPrompt;document.getElementById("resetBtn").onclick=resetApp;renderPrompt();
-</script>
-</body>
-</html>
+import React, { useMemo, useState } from "react";
+import { Copy, RefreshCcw, Music, SlidersHorizontal, Wand2, Sparkles, Plus, X } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const SUNO_LOGO_DATA = "data:image/webp;base64,UklGRmwDAABXRUJQVlA4IGADAABwEwCdASpgAGAAPp1In0qlpKMnKduY+OATiWgAwroNWd6Tfm/yM9ou2+D6Ln5YXSX52D+5/tHrEH7AezB0vX+qYPhVe07QVggxS3E96OpCJBJYXhYaHZDT19wNwIiXIjZ3nrqGLfqWEe3X3SlDg1GjHqO/kYsJ9hYAcBpF/VKiJAqCoagRphSAichV+MjwjnS4gvBr8bkOTSxMNfkZZW632JpeAAD+7unf+3Z/VofXZ/oof5Z7zD3eqO8UAqmpFg5jiUwW+hp/6WFi5M2bd4xl5FyxZjSnt1ycip9d+sKSRrkeLxyLT66/vYEK8ZPxKLfzxMplSCMl45Ntq2HgLLOcGlWpEqGs1DofrC6a8LN2LJsGqmB0zH/Kan4P1hvA5yScj0gJV/kSo7PyqUUG9MQ03aH/O1F3E12BZqbsi1GosBZvHBc11TGP+JP0wgueEwMfOX9Pd3JsmpfHYWdrITHpMFE5R0NGVlsNYFTfcKZvTQqGRI80Ndp/F+/ENihYzaOLuf6StfUyJBiHa5f48EQGJGH6/NDrAAD4t1gwBXr1KtMNQtlS08u2/BLrxdXwqTItSxZnVxLi0Da63vfr/fHiPa24Lr8kShyuYtBsS3XYFmczsJ2QAcRTHSWaqNJCq8F3hwXmrAv+GqouZRo+vvx78yAqljBSZNJdNkWt9Q9ux+l/RwXuyzMp/rHdygO42DzD7oJ3jT3fUEQ7z5fcNNQgXci+/lrfHO8ylLLn8qUB2iyo5dVfNaC7Nnd3BprW7o+lIb45E1uhaAjUZmEdh77lJvw2WNehc05RO/33b4oBy1hoYp+wnvLmxshuRE2m29G73D8ChYHnaXBWKQBk9NEY1BURTcJ4X7s27bsTeof3TMAuLD2mvrW5JdWQvgk4/B5jdEW6zwuURxWKR1j+Wtkybb6PuDXDYYm4zgz5wwOrK6G5fkmqXyFInoRrquLA2dBHVL8K500DdmEAFe6h9rwdMJ9q/UNTRpT4aX/pbr+rAbiqdyHVYR8tlKnXSsqW6q4sLNNX/bIMv7X4E6ZsJ7csEqcLdF0PDbTnIXuACNC/vPu/FaS3HfwUrf7M0vQLU6MTCpb/pVDabFktQQHm81BM59J+yzaLQby2BwRgew/HPkaqHiiy9KFLNVxU9/WgAAA=";
+
+const SunoLogo = ({ className = "" }) => (
+  <img
+    src={SUNO_LOGO_DATA}
+    alt="SUNO"
+    className={`object-cover ${className}`}
+    draggable="false"
+  />
+);
+
+const translateValue = (value) => {
+  const dictionary = {
+    "muy alto": "very high",
+    "alto": "high",
+    "medio": "medium",
+    "bajo": "low",
+    "medio-bajo": "medium-low",
+    "muy controlada": "very controlled",
+    "controlada": "controlled",
+    "media": "medium",
+    "experimental": "experimental",
+    "agresivo": "aggressive",
+    "cinematográfico": "cinematic",
+    "Solo instrumental": "instrumental only",
+    "Solo chops vocales sutiles": "subtle vocal chops only",
+    "Voz de referencia para hook": "hook reference vocal",
+    "Voz guía rapeada": "rap guide vocal",
+    "Solo texturas vocales de fondo": "background vocal textures only",
+    "Extensión corta": "short extension",
+    "Extensión corta a media": "short-to-medium extension",
+    "Arreglo completo": "full arrangement",
+    "Solo sección de hook": "hook section only",
+    "Solo intro/outro": "intro/outro only"
+  };
+
+  return dictionary[value] || value;
+};
+
+const initialState = {
+  mode: "Extend",
+  model: "v5.5",
+  percussionMode: "Con percusión",
+  mainUse: "Extender un loop propio para extraer stems y reinsertarlos en FL Studio",
+  genre: "Boom Bap",
+  fusionGenres: ["Soul", "Jazz Rap", "Lo-fi Hip Hop"],
+  newFusionGenre: "",
+  instruments: ["Rhodes eléctrico", "bajo cálido", "batería con swing", "piano melancólico", "textura de vinilo"],
+  newInstrument: "",
+  subStyle: "sample-based, underground, soulful, dusty",
+  bpm: "",
+  key: "",
+  eraYear: "1996",
+  atmosphere: "nocturna, cinematográfica, underground, con textura analógica",
+  emotionIntent: "nostalgia, tensión elegante, introspección y crudeza callejera",
+  mood: "oscuro, nostálgico, callejero, elegante",
+  referenceEnergy: "medio",
+  audioInfluence: "alto",
+  styleInfluence: "medio-bajo",
+  creativity: "controlada",
+  structure: "intro corta, verso, hook, variación, outro",
+  preserve: "groove, BPM, tonalidad, swing, sample principal y atmósfera original",
+  addElements: "bajo cálido, fills de batería, texturas vinilo, pads sutiles, chops vocales ambientales",
+  avoid: "EDM, pop comercial, voces exageradas, cambios bruscos de tonalidad, drums genéricos, sonido demasiado IA",
+  stemGoal: "rescatar bajos alternativos, ambientes, fills, melodías secundarias y texturas",
+  vocalOption: "Solo instrumental",
+  mixDirection: "mezcla moderna limpia con textura clásica cruda",
+  outputLength: "Extensión corta a media",
+  customInstruction: "",
+  notes: "Debe sonar como material sampleable, no como canción final."
+};
+
+export default function SunoPromptGeneratorTest() {
+  const [form, setForm] = useState(initialState);
+
+  const update = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+  const addToArray = (arrayKey, inputKey) => {
+    const value = form[inputKey].trim();
+    if (!value) return;
+    setForm((prev) => ({
+      ...prev,
+      [arrayKey]: prev[arrayKey].includes(value) ? prev[arrayKey] : [...prev[arrayKey], value],
+      [inputKey]: ""
+    }));
+  };
+
+  const removeFromArray = (arrayKey, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [arrayKey]: prev[arrayKey].filter((item) => item !== value)
+    }));
+  };
+
+  const prompt = useMemo(() => {
+    const clean = (value) => String(value || "").trim();
+    const join = (items) => items.filter(Boolean).join(", ");
+
+    const parts = [
+      `${form.mode} / ${form.model}.`,
+      `Goal: ${clean(form.mainUse)}.`,
+      `Main genre: ${form.genre}.`,
+      form.fusionGenres.length ? `Fuse with: ${join(form.fusionGenres)}.` : "No extra genre fusion.",
+      `Style: ${clean(form.subStyle)}.`,
+      form.bpm ? `Tempo: around ${form.bpm} BPM.` : "Keep original tempo.",
+      form.key ? `Key: around ${form.key}.` : "Keep original key.",
+      form.eraYear ? `Era: inspired by ${form.eraYear}, no artist/song copying.` : "Timeless sound.",
+      clean(form.atmosphere) ? `Atmosphere: ${clean(form.atmosphere)}.` : "",
+      clean(form.emotionIntent) ? `Emotion: ${clean(form.emotionIntent)}.` : "",
+      `Energy: ${translateValue(form.referenceEnergy)}. Mood: ${clean(form.mood)}.`,
+      `Preserve: ${clean(form.preserve)}.`,
+      `Structure: ${clean(form.structure)}.`,
+      form.percussionMode === "Sin percusión / solo melodía"
+        ? "No drums or percussion; focus on melody, harmony, atmosphere and sampleable layers."
+        : "Drums/percussion allowed, but keep them tasteful and supportive.",
+      form.instruments.length ? `Instruments/textures: ${join(form.instruments)}.` : "",
+      clean(form.addElements) ? `Add: ${clean(form.addElements)}.` : "",
+      clean(form.customInstruction)
+        ? `Custom: ${clean(form.customInstruction)}. Make it natural and coherent.`
+        : "",
+      `Vocal: ${translateValue(form.vocalOption)}.`,
+      `Mix: ${clean(form.mixDirection)}. Length: ${translateValue(form.outputLength)}.`,
+      `Audio influence: ${translateValue(form.audioInfluence)}. Style influence: ${translateValue(form.styleInfluence)}. Creativity: ${translateValue(form.creativity)}.`,
+      clean(form.avoid) ? `Avoid: ${clean(form.avoid)}.` : "",
+      clean(form.stemGoal) ? `Stem goal: ${clean(form.stemGoal)}.` : "",
+      clean(form.notes) ? `Notes: ${clean(form.notes)}.` : ""
+    ].filter(Boolean);
+
+    let finalPrompt = parts.join(" ").replaceAll("
+", " ").replaceAll("  ", " ").trim();
+    while (finalPrompt.includes("  ")) finalPrompt = finalPrompt.replaceAll("  ", " ");
+
+    if (finalPrompt.length > 1000) {
+      finalPrompt = finalPrompt.slice(0, 997).trim() + "...";
+    }
+
+    return finalPrompt;
+  }, [form]);
+
+  const copyPrompt = async () => {
+    await navigator.clipboard.writeText(prompt);
+  };
+
+  const resetBoomBap = () => setForm(initialState);
+
+  const fields = [
+    { key: "mode", label: "Modo SUNO", options: ["Extend", "Cover", "Create", "Remix / Variation"] },
+    { key: "model", label: "Modelo", options: ["v5.5", "v5", "Custom Model"] },
+    { key: "genre", label: "Género principal", options: ["Boom Bap", "Boom Trap", "Trap", "Detroit", "Lo-fi Hip Hop", "R&B", "Soulful Rap", "Experimental Hip Hop"] },
+    { key: "percussionMode", label: "Percusión", options: ["Con percusión", "Sin percusión / solo melodía"] },
+    { key: "audioInfluence", label: "Influencia del audio", options: ["muy alto", "alto", "medio", "bajo"] },
+    { key: "styleInfluence", label: "Influencia del estilo", options: ["alto", "medio", "medio-bajo", "bajo"] },
+    { key: "creativity", label: "Creatividad", options: ["muy controlada", "controlada", "media", "experimental"] },
+    { key: "referenceEnergy", label: "Energía", options: ["bajo", "medio", "alto", "agresivo", "cinematográfico"] },
+    { key: "vocalOption", label: "Dirección vocal", options: ["Solo instrumental", "Solo chops vocales sutiles", "Voz de referencia para hook", "Voz guía rapeada", "Solo texturas vocales de fondo"] },
+    { key: "outputLength", label: "Duración sugerida", options: ["Extensión corta", "Extensión corta a media", "Arreglo completo", "Solo sección de hook", "Solo intro/outro"] }
+  ];
+
+  const textareas = [
+    { key: "mainUse", label: "Objetivo de uso" },
+    { key: "subStyle", label: "Subestilo / textura" },
+    { key: "mood", label: "Mood / color musical" },
+    { key: "atmosphere", label: "Atmósfera" },
+    { key: "emotionIntent", label: "Emoción que se quiere transmitir" },
+    { key: "structure", label: "Estructura deseada" },
+    { key: "preserve", label: "Qué debe preservar del loop" },
+    { key: "addElements", label: "Qué puede agregar" },
+    { key: "avoid", label: "Qué debe evitar" },
+    { key: "stemGoal", label: "Objetivo al extraer stems" },
+    { key: "mixDirection", label: "Dirección de mezcla" },
+    { key: "notes", label: "Notas finales" }
+  ];
+
+  const ChipEditor = ({ title, description, items, inputValue, inputKey, arrayKey, placeholder }) => (
+    <div className="rounded-[2rem] bg-black/18 border border-white/20 p-4 space-y-4 backdrop-blur-xl">
+      <div>
+        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <p className="text-sm text-white/70 mt-1">{description}</p>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {items.length ? (
+          items.map((item) => (
+            <span key={item} className="inline-flex items-center gap-2 rounded-full bg-white/18 border border-white/25 px-3 py-1.5 text-sm text-white shadow-sm">
+              {item}
+              <button
+                type="button"
+                onClick={() => removeFromArray(arrayKey, item)}
+                className="rounded-full hover:bg-white/20 p-0.5 transition"
+                aria-label={`Quitar ${item}`}
+              >
+                <X size={14} />
+              </button>
+            </span>
+          ))
+        ) : (
+          <span className="text-sm text-white/55">Sin elementos agregados.</span>
+        )}
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          value={inputValue}
+          onChange={(e) => update(inputKey, e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              addToArray(arrayKey, inputKey);
+            }
+          }}
+          placeholder={placeholder}
+          className="flex-1 rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+        />
+        <Button
+          onClick={() => addToArray(arrayKey, inputKey)}
+          className="rounded-2xl bg-gradient-to-r from-[#ffca28] via-[#ff8a00] to-[#ff5a1f] hover:brightness-110 text-white border-0 shadow-[0_12px_30px_rgba(255,122,24,0.35)]"
+        >
+          <Plus size={16} />
+        </Button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="relative min-h-screen overflow-hidden text-white p-4 md:p-8 bg-[radial-gradient(circle_at_12%_8%,rgba(255,202,40,0.95)_0%,rgba(255,138,0,0.9)_20%,transparent_38%),radial-gradient(circle_at_85%_18%,rgba(255,60,172,0.75)_0%,rgba(255,79,109,0.55)_24%,transparent_42%),radial-gradient(circle_at_50%_95%,rgba(255,90,31,0.9)_0%,rgba(255,60,172,0.65)_32%,transparent_55%),linear-gradient(135deg,#ffb000_0%,#ff7a18_30%,#ff4f6d_66%,#ff3cac_100%)] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.18)_0%,transparent_18%),radial-gradient(circle_at_72%_62%,rgba(255,255,255,0.12)_0%,transparent_22%)] before:blur-3xl before:pointer-events-none after:absolute after:inset-0 after:bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] after:bg-[size:48px_48px] after:opacity-20 after:pointer-events-none">
+      <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-[#ffca28]/55 blur-3xl" />
+      <div className="absolute top-24 -right-24 h-96 w-96 rounded-full bg-[#ff3cac]/45 blur-3xl" />
+      <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-[#ff5a1f]/45 blur-3xl" />
+
+      <div className="relative z-10 max-w-7xl mx-auto space-y-6">
+        <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/30 text-sm text-white mb-4 backdrop-blur-xl shadow-[0_12px_40px_rgba(255,60,60,0.25)]">
+              <Sparkles size={16} />
+              <span className="font-semibold tracking-wide">SUNO Prompt Lab</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="h-20 w-20 rounded-[1.65rem] bg-white/18 border border-white/30 p-1.5 backdrop-blur-xl shadow-[0_18px_50px_rgba(120,28,0,0.28)] overflow-hidden shrink-0">
+                <SunoLogo className="h-full w-full rounded-[1.25rem]" />
+              </div>
+              <h1 className="text-3xl md:text-6xl font-black tracking-tight drop-shadow-[0_8px_30px_rgba(110,20,0,0.35)]">Generador de prompts para SUNO</h1>
+            </div>
+            <p className="text-white/88 mt-3 max-w-2xl leading-relaxed">
+              Define un género principal y agrega por separado los géneros a fusionar y los instrumentos que quieres usar. La interfaz queda en español y el prompt final sale en inglés.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={resetBoomBap} className="rounded-2xl bg-white/18 hover:bg-white/28 text-white border border-white/30 backdrop-blur-xl shadow-[0_14px_38px_rgba(100,30,0,0.25)] transition-all duration-300 hover:-translate-y-0.5">
+              <RefreshCcw size={16} className="mr-2" /> Preset Boom Bap
+            </Button>
+            <Button onClick={copyPrompt} className="rounded-2xl bg-gradient-to-r from-[#ffca28] via-[#ff5a1f] to-[#ff3cac] hover:brightness-110 text-white border-0 shadow-[0_18px_50px_rgba(255,60,80,0.42)] transition-all duration-300 hover:-translate-y-0.5">
+              <Copy size={16} className="mr-2" /> Copiar prompt
+            </Button>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <Card className="bg-white/16 border-white/25 backdrop-blur-2xl rounded-[2rem] shadow-[0_24px_80px_rgba(115,28,0,0.28)] ring-1 ring-white/10">
+            <CardContent className="p-5 md:p-6 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#ffca28] via-[#ff8a00] to-[#ff5a1f] flex items-center justify-center shadow-[0_12px_30px_rgba(255,122,24,0.42)]">
+                  <SlidersHorizontal size={20} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-white">Variables principales</h2>
+                  <p className="text-sm text-white/72">Primero eliges el género principal. Luego decides si quieres percusión, fusiones, instrumentos y una personalización adicional escrita por ti.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {fields.map((field) => (
+                  <label key={field.key} className="space-y-2">
+                    <span className="text-sm text-white/82">{field.label}</span>
+                    <select
+                      value={form[field.key]}
+                      onChange={(e) => update(field.key, e.target.value)}
+                      className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                    >
+                      {field.options.map((option) => (
+                        <option key={option} value={option} className="bg-[#7a240b] text-white">{option}</option>
+                      ))}
+                    </select>
+                  </label>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <label className="space-y-2">
+                  <span className="text-sm text-white/82">BPM opcional</span>
+                  <input
+                    value={form.bpm}
+                    onChange={(e) => update("bpm", e.target.value)}
+                    placeholder="Ej: 86"
+                    className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                  />
+                </label>
+                <label className="space-y-2">
+                  <span className="text-sm text-white/82">Tonalidad opcional</span>
+                  <input
+                    value={form.key}
+                    onChange={(e) => update("key", e.target.value)}
+                    placeholder="Ej: F minor"
+                    className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                  />
+                </label>
+                <label className="space-y-2">
+                  <span className="text-sm text-white/82">Año / época</span>
+                  <input
+                    value={form.eraYear}
+                    onChange={(e) => update("eraYear", e.target.value)}
+                    placeholder="Ej: 1996, 2003, 2012"
+                    className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                  />
+                </label>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <ChipEditor
+                  title="Géneros a fusionar"
+                  description="Son influencias secundarias. No reemplazan el género principal; solo orientan el color musical."
+                  items={form.fusionGenres}
+                  inputValue={form.newFusionGenre}
+                  inputKey="newFusionGenre"
+                  arrayKey="fusionGenres"
+                  placeholder="Ej: Neo Soul, Gospel, Jazz, Drill, Afrobeat"
+                />
+                <ChipEditor
+                  title="Instrumentos o sonidos a usar"
+                  description="Agrega instrumentos, texturas o capas que SUNO debería intentar incluir en la extensión."
+                  items={form.instruments}
+                  inputValue={form.newInstrument}
+                  inputKey="newInstrument"
+                  arrayKey="instruments"
+                  placeholder="Ej: contrabajo, saxofón, moog bass, strings, vinyl crackle"
+                />
+
+                <div className="rounded-[2rem] bg-black/18 border border-white/20 p-4 space-y-3 backdrop-blur-xl">
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Personalización adicional</h3>
+                    <p className="text-sm text-white/70 mt-1">Escribe cualquier indicación especial que quieras añadir al prompt.</p>
+                  </div>
+                  <textarea
+                    value={form.customInstruction}
+                    onChange={(e) => update("customInstruction", e.target.value)}
+                    rows={4}
+                    placeholder="Ej: quiero que haya un solo de violín virtuoso en una sección breve, musical y coherente con el loop original"
+                    className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] resize-none backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/16 border-white/25 backdrop-blur-2xl rounded-[2rem] shadow-[0_24px_80px_rgba(115,28,0,0.28)] ring-1 ring-white/10">
+            <CardContent className="p-5 md:p-6 space-y-5">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#ff5a1f] via-[#ff4f6d] to-[#ff3cac] flex items-center justify-center shadow-[0_12px_30px_rgba(255,60,172,0.36)]">
+                  <Wand2 size={20} />
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-white">Prompt final en inglés</h2>
+                  <p className="text-sm text-white/72">Salida lista para copiar y pegar en SUNO. Máximo: 1000 caracteres.</p>
+                </div>
+              </div>
+
+              <div className="relative rounded-[2rem] bg-black/32 border border-white/24 p-5 min-h-[670px] whitespace-pre-wrap text-white/96 leading-relaxed text-sm backdrop-blur-xl shadow-inner shadow-black/20 overflow-hidden">
+                <div className="mb-3 inline-flex rounded-full bg-white/12 border border-white/18 px-3 py-1 text-xs font-semibold text-white/80">
+                  {prompt.length}/1000 caracteres
+                </div>
+                <div className="whitespace-pre-wrap">
+                  {prompt}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="bg-white/16 border-white/25 backdrop-blur-2xl rounded-[2rem] shadow-[0_24px_80px_rgba(115,28,0,0.28)] ring-1 ring-white/10">
+          <CardContent className="p-5 md:p-6 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#ffca28] via-[#ff8a00] to-[#ff3cac] flex items-center justify-center shadow-[0_12px_30px_rgba(255,138,0,0.35)]">
+                <Music size={20} />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-white">Detalle fino del prompt</h2>
+                <p className="text-sm text-white/72">Aquí defines estructura, atmósfera, emoción, restricciones, preservación del loop, objetivo de los stems y cualquier personalización especial.</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {textareas.map((field) => (
+                <label key={field.key} className="space-y-2">
+                  <span className="text-sm text-white/82">{field.label}</span>
+                  <textarea
+                    value={form[field.key]}
+                    onChange={(e) => update(field.key, e.target.value)}
+                    rows={3}
+                    className="w-full rounded-2xl bg-black/24 border border-white/24 px-4 py-3 text-white placeholder:text-white/45 outline-none focus:ring-2 focus:ring-[#ffca28] focus:border-[#ffca28] resize-none backdrop-blur-xl shadow-inner shadow-black/10 transition-all duration-200"
+                  />
+                </label>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
