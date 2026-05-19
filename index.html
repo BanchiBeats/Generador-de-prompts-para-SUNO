@@ -5,37 +5,551 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generador de Prompts para SUNO</title>
   <style>
-    :root{--yellow:#ffca28;--orange:#ff8a00;--coral:#ff5a1f;--pink:#ff4f6d;--magenta:#ff3cac;--glass:rgba(255,255,255,.16);--glass-border:rgba(255,255,255,.25);--dark-glass:rgba(0,0,0,.24);--dark-output:rgba(0,0,0,.32)}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;background:radial-gradient(circle at 12% 8%,rgba(255,202,40,.95) 0%,rgba(255,138,0,.9) 20%,transparent 38%),radial-gradient(circle at 85% 18%,rgba(255,60,172,.75) 0%,rgba(255,79,109,.55) 24%,transparent 42%),radial-gradient(circle at 50% 95%,rgba(255,90,31,.9) 0%,rgba(255,60,172,.65) 32%,transparent 55%),linear-gradient(135deg,#ffb000 0%,#ff7a18 30%,#ff4f6d 66%,#ff3cac 100%);overflow-x:hidden}body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.18) 0%,transparent 18%),radial-gradient(circle at 72% 62%,rgba(255,255,255,.12) 0%,transparent 22%);filter:blur(55px);z-index:0}body::after{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;opacity:.2;z-index:0}.blob{position:fixed;border-radius:999px;filter:blur(60px);pointer-events:none;z-index:1}.blob.one{top:-96px;left:-96px;width:288px;height:288px;background:rgba(255,202,40,.55)}.blob.two{top:96px;right:-96px;width:384px;height:384px;background:rgba(255,60,172,.45)}.blob.three{bottom:0;left:33%;width:320px;height:320px;background:rgba(255,90,31,.45)}.page{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:32px}header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}.brand-pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(18px);box-shadow:0 12px 40px rgba(255,60,60,.25);margin-bottom:16px;font-size:14px;font-weight:800;letter-spacing:.01em}.title-row{display:flex;align-items:center;gap:16px}.logo-box{width:80px;height:80px;border-radius:26px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);padding:6px;backdrop-filter:blur(18px);box-shadow:0 18px 50px rgba(120,28,0,.28);overflow:hidden;flex:0 0 auto}.logo{display:block;width:100%;height:100%;object-fit:cover;border-radius:20px;user-select:none;-webkit-user-drag:none}h1{margin:0;font-size:clamp(32px,5vw,64px);line-height:.95;font-weight:950;letter-spacing:-.045em;text-shadow:0 8px 30px rgba(110,20,0,.35)}.subtitle{max-width:720px;color:rgba(255,255,255,.88);line-height:1.6;margin:14px 0 0;font-size:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}button{border:0;cursor:pointer;color:#fff;font-weight:800;font-family:inherit;transition:transform .22s ease,filter .22s ease,background .22s ease}button:hover{transform:translateY(-1px)}.btn{min-height:44px;padding:12px 16px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.btn-secondary{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(16px);box-shadow:0 14px 38px rgba(100,30,0,.25)}.btn-primary{background:linear-gradient(90deg,var(--yellow),var(--coral),var(--magenta));box-shadow:0 18px 50px rgba(255,60,80,.42)}.btn-primary:hover{filter:brightness(1.1)}.grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}.card{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(24px);border-radius:32px;box-shadow:0 24px 80px rgba(115,28,0,.28);outline:1px solid rgba(255,255,255,.1);padding:24px}.card-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}.icon-box{width:44px;height:44px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,var(--yellow),var(--orange),var(--coral));box-shadow:0 12px 30px rgba(255,122,24,.42);flex:0 0 auto}.icon-box.alt{background:linear-gradient(135deg,var(--coral),var(--pink),var(--magenta));box-shadow:0 12px 30px rgba(255,60,172,.36)}.icon-box.full{background:linear-gradient(135deg,var(--yellow),var(--orange),var(--magenta));box-shadow:0 12px 30px rgba(255,138,0,.35)}.card-title h2,.chip-editor h3{margin:0;font-size:20px;line-height:1.2}.card-title p,.chip-editor p{margin:4px 0 0;color:rgba(255,255,255,.72);font-size:14px;line-height:1.45}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}label{display:grid;gap:8px;min-width:0}label span{color:rgba(255,255,255,.82);font-size:14px}input,select,textarea{width:100%;color:#fff;background:var(--dark-glass);border:1px solid rgba(255,255,255,.24);border-radius:18px;padding:12px 14px;font-family:inherit;font-size:15px;outline:none;backdrop-filter:blur(16px);box-shadow:inset 0 0 16px rgba(0,0,0,.1);transition:box-shadow .18s ease,border-color .18s ease}textarea{resize:vertical;min-height:84px}input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45)}input:focus,select:focus,textarea:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,202,40,.25),inset 0 0 16px rgba(0,0,0,.1)}option{background:#7a240b;color:#fff}.chip-section{display:grid;gap:16px;margin-top:16px}.chip-editor{border-radius:32px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.2);padding:16px;backdrop-filter:blur(18px)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;min-height:31px}.chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);font-size:14px;box-shadow:0 3px 10px rgba(0,0,0,.1)}.chip button{width:20px;height:20px;border-radius:999px;background:transparent;padding:0;font-size:16px;line-height:1}.chip button:hover{background:rgba(255,255,255,.2);transform:none}.chip-input-row{display:flex;gap:8px}.chip-add{width:48px;border-radius:18px;background:linear-gradient(90deg,var(--yellow),var(--orange),var(--coral));box-shadow:0 12px 30px rgba(255,122,24,.35);font-size:22px;flex:0 0 auto}.output-box{min-height:670px;white-space:pre-wrap;color:rgba(255,255,255,.96);line-height:1.55;font-size:14px;background:var(--dark-output);border:1px solid rgba(255,255,255,.24);border-radius:32px;padding:20px;backdrop-filter:blur(18px);box-shadow:inset 0 0 18px rgba(0,0,0,.2);overflow:hidden}.char-counter{display:inline-flex;margin-bottom:12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:6px 12px;font-size:12px;font-weight:800;color:rgba(255,255,255,.82)}.fine-card{margin-top:24px}.fine-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.toast{position:fixed;right:22px;bottom:22px;z-index:20;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.2);color:#fff;padding:12px 16px;border-radius:16px;backdrop-filter:blur(12px);opacity:0;transform:translateY(12px);transition:opacity .22s ease,transform .22s ease;pointer-events:none;font-weight:700}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:980px){.grid-main{grid-template-columns:1fr}header{flex-direction:column;align-items:stretch}.actions{justify-content:flex-start}}@media(max-width:720px){.page{padding:20px}.title-row{align-items:flex-start;flex-direction:column}.form-grid,.form-grid.three,.fine-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:26px}.logo-box{width:68px;height:68px}.chip-input-row{flex-direction:column}.chip-add{width:100%;height:44px}}
+    :root{--yellow:#ffca28;--orange:#ff8a00;--coral:#ff5a1f;--pink:#ff4f6d;--magenta:#ff3cac;--glass:rgba(255,255,255,.16);--glass-border:rgba(255,255,255,.25);--dark-glass:rgba(0,0,0,.24);--dark-output:rgba(0,0,0,.32)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff;background:radial-gradient(circle at 12% 8%,rgba(255,202,40,.95) 0%,rgba(255,138,0,.9) 20%,transparent 38%),radial-gradient(circle at 85% 18%,rgba(255,60,172,.75) 0%,rgba(255,79,109,.55) 24%,transparent 42%),radial-gradient(circle at 50% 95%,rgba(255,90,31,.9) 0%,rgba(255,60,172,.65) 32%,transparent 55%),linear-gradient(135deg,#ffb000 0%,#ff7a18 30%,#ff4f6d 66%,#ff3cac 100%);overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.18) 0%,transparent 18%),radial-gradient(circle at 72% 62%,rgba(255,255,255,.12) 0%,transparent 22%);filter:blur(55px);z-index:0}
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;opacity:.2;z-index:0}
+    .blob{position:fixed;border-radius:999px;filter:blur(60px);pointer-events:none;z-index:1}
+    .blob.one{top:-96px;left:-96px;width:288px;height:288px;background:rgba(255,202,40,.55)}
+    .blob.two{top:96px;right:-96px;width:384px;height:384px;background:rgba(255,60,172,.45)}
+    .blob.three{bottom:0;left:33%;width:320px;height:320px;background:rgba(255,90,31,.45)}
+    .page{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:32px}
+    header{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}
+    .brand-pill{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(18px);box-shadow:0 12px 40px rgba(255,60,60,.25);margin-bottom:16px;font-size:14px;font-weight:800;letter-spacing:.01em}
+    .title-row{display:flex;align-items:center;gap:16px}
+    .logo-box{width:80px;height:80px;border-radius:26px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);padding:6px;backdrop-filter:blur(18px);box-shadow:0 18px 50px rgba(120,28,0,.28);overflow:hidden;flex:0 0 auto}
+    .logo{display:block;width:100%;height:100%;object-fit:cover;border-radius:20px;user-select:none;-webkit-user-drag:none}
+    h1{margin:0;font-size:clamp(32px,5vw,64px);line-height:.95;font-weight:950;letter-spacing:-.045em;text-shadow:0 8px 30px rgba(110,20,0,.35)}
+    .subtitle{max-width:720px;color:rgba(255,255,255,.88);line-height:1.6;margin:14px 0 0;font-size:16px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+    button{border:0;cursor:pointer;color:#fff;font-weight:800;font-family:inherit;transition:transform .22s ease,filter .22s ease,background .22s ease}
+    button:hover{transform:translateY(-1px)}
+    .btn{min-height:44px;padding:12px 16px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+    .btn-secondary{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(16px);box-shadow:0 14px 38px rgba(100,30,0,.25)}
+    .btn-primary{background:linear-gradient(90deg,var(--yellow),var(--coral),var(--magenta));box-shadow:0 18px 50px rgba(255,60,80,.42)}
+    .btn-primary:hover{filter:brightness(1.1)}
+    .btn-danger{background:rgba(255,60,60,.25);border:1px solid rgba(255,100,100,.4)}
+    .grid-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+    .card{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(24px);border-radius:32px;box-shadow:0 24px 80px rgba(115,28,0,.28);outline:1px solid rgba(255,255,255,.1);padding:24px}
+    .card-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .icon-box{width:44px;height:44px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,var(--yellow),var(--orange),var(--coral));box-shadow:0 12px 30px rgba(255,122,24,.42);flex:0 0 auto}
+    .icon-box.alt{background:linear-gradient(135deg,var(--coral),var(--pink),var(--magenta));box-shadow:0 12px 30px rgba(255,60,172,.36)}
+    .icon-box.full{background:linear-gradient(135deg,var(--yellow),var(--orange),var(--magenta));box-shadow:0 12px 30px rgba(255,138,0,.35)}
+    .icon-box.hist{background:linear-gradient(135deg,#3a1c71,#d76d77,#ffaf7b);box-shadow:0 12px 30px rgba(60,28,113,.35)}
+    .icon-box.preset-ico{background:linear-gradient(135deg,#11998e,#38ef7d);box-shadow:0 12px 30px rgba(17,153,142,.35)}
+    .card-title h2,.chip-editor h3{margin:0;font-size:20px;line-height:1.2}
+    .card-title p,.chip-editor p{margin:4px 0 0;color:rgba(255,255,255,.72);font-size:14px;line-height:1.45}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}
+    label{display:grid;gap:8px;min-width:0}
+    label span{color:rgba(255,255,255,.82);font-size:14px}
+    input,select,textarea{width:100%;color:#fff;background:var(--dark-glass);border:1px solid rgba(255,255,255,.24);border-radius:18px;padding:12px 14px;font-family:inherit;font-size:15px;outline:none;backdrop-filter:blur(16px);box-shadow:inset 0 0 16px rgba(0,0,0,.1);transition:box-shadow .18s ease,border-color .18s ease}
+    textarea{resize:vertical;min-height:84px}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45)}
+    input:focus,select:focus,textarea:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,202,40,.25),inset 0 0 16px rgba(0,0,0,.1)}
+    option{background:#7a240b;color:#fff}
+    .chip-section{display:grid;gap:16px;margin-top:16px}
+    .chip-editor{border-radius:32px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.2);padding:16px;backdrop-filter:blur(18px)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;min-height:31px}
+    .chip{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);font-size:14px;box-shadow:0 3px 10px rgba(0,0,0,.1)}
+    .chip button{width:20px;height:20px;border-radius:999px;background:transparent;padding:0;font-size:16px;line-height:1}
+    .chip button:hover{background:rgba(255,255,255,.2);transform:none}
+    .chip-input-row{display:flex;gap:8px;position:relative}
+    .chip-add{width:48px;border-radius:18px;background:linear-gradient(90deg,var(--yellow),var(--orange),var(--coral));box-shadow:0 12px 30px rgba(255,122,24,.35);font-size:22px;flex:0 0 auto}
+    .output-box{min-height:300px;white-space:pre-wrap;color:rgba(255,255,255,.96);line-height:1.55;font-size:14px;background:var(--dark-output);border:1px solid rgba(255,255,255,.24);border-radius:32px;padding:20px;backdrop-filter:blur(18px);box-shadow:inset 0 0 18px rgba(0,0,0,.2);overflow:hidden}
+    .char-counter{display:inline-flex;margin-bottom:12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:6px 12px;font-size:12px;font-weight:800;color:rgba(255,255,255,.82)}
+    .char-counter.warn{background:rgba(255,165,0,.25);border-color:rgba(255,165,0,.5);color:#ffdd88}
+    .char-counter.over{background:rgba(255,60,60,.25);border-color:rgba(255,60,60,.5);color:#ff9999}
+    .truncation-warning{display:none;margin-top:12px;padding:12px 16px;border-radius:18px;background:rgba(255,100,0,.2);border:1px solid rgba(255,150,0,.4);font-size:13px;line-height:1.5;color:rgba(255,220,150,.95)}
+    .truncation-warning.visible{display:block}
+    .truncation-warning strong{color:#ffdd88;display:block;margin-bottom:6px}
+    .fine-card{margin-top:24px}
+    .fine-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+
+    /* Autocomplete dropdown */
+    .autocomplete-list{position:absolute;top:calc(100% + 4px);left:0;right:56px;background:#4a1505;border:1px solid rgba(255,255,255,.3);border-radius:18px;z-index:100;max-height:200px;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+    .autocomplete-list div{padding:10px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .autocomplete-list div:last-child{border-bottom:none}
+    .autocomplete-list div:hover,.autocomplete-list div.ac-active{background:rgba(255,255,255,.15)}
+    .autocomplete-list div mark{background:transparent;color:var(--yellow);font-weight:800}
+
+    /* Presets panel */
+    .presets-panel{border-radius:32px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.2);padding:20px;backdrop-filter:blur(18px);margin-bottom:0}
+    .preset-list{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+    .preset-item{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);font-size:14px;font-weight:700;cursor:pointer;transition:background .18s}
+    .preset-item:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
+    .preset-item .del-preset{background:transparent;border:none;color:rgba(255,255,255,.6);font-size:16px;padding:0;width:18px;height:18px;cursor:pointer;font-weight:800}
+    .preset-item .del-preset:hover{color:#ff6b6b;transform:none}
+    .preset-save-row{display:flex;gap:8px;margin-top:14px}
+    .preset-save-row input{flex:1}
+    .preset-save-row button{flex:0 0 auto;width:auto;padding:0 18px}
+
+    /* History panel */
+    .history-panel{border-radius:32px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.2);padding:20px;backdrop-filter:blur(18px);margin-top:24px}
+    .history-list{display:grid;gap:10px;margin-top:14px}
+    .history-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:12px 16px;cursor:pointer;font-size:13px;line-height:1.5;color:rgba(255,255,255,.85);transition:background .18s;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+    .history-item:hover{background:rgba(255,255,255,.15)}
+    .history-item .hist-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .history-item .hist-meta{font-size:11px;color:rgba(255,255,255,.45);white-space:nowrap}
+    .history-item .hist-copy{background:rgba(255,255,255,.15);border:none;border-radius:10px;color:#fff;font-size:12px;padding:4px 10px;cursor:pointer;font-weight:700;white-space:nowrap}
+    .history-item .hist-copy:hover{background:rgba(255,255,255,.3);transform:none}
+    .empty-state{color:rgba(255,255,255,.45);font-size:14px;text-align:center;padding:20px}
+
+    .toast{position:fixed;right:22px;bottom:22px;z-index:20;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.2);color:#fff;padding:12px 16px;border-radius:16px;backdrop-filter:blur(12px);opacity:0;transform:translateY(12px);transition:opacity .22s ease,transform .22s ease;pointer-events:none;font-weight:700}
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    @media(max-width:980px){.grid-main{grid-template-columns:1fr}header{flex-direction:column;align-items:stretch}.actions{justify-content:flex-start}}
+    @media(max-width:720px){.page{padding:20px}.title-row{align-items:flex-start;flex-direction:column}.form-grid,.form-grid.three,.fine-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:26px}.logo-box{width:68px;height:68px}.chip-input-row{flex-direction:column}.chip-add{width:100%;height:44px}}
   </style>
 </head>
 <body>
   <div class="blob one"></div><div class="blob two"></div><div class="blob three"></div>
   <main class="page">
-    <header><section><div class="brand-pill"><span>✦</span><span>SUNO Prompt Lab</span></div><div class="title-row"><div class="logo-box"><img id="brandLogoMain" class="logo" alt="SUNO" /></div><h1>Generador de prompts para SUNO</h1></div><p class="subtitle">Define un género principal y agrega por separado los géneros a fusionar y los instrumentos que quieres usar. La interfaz queda en español y el prompt final sale en inglés.</p></section><div class="actions"><button class="btn btn-secondary" id="resetBtn" type="button">↻ Preset Boom Bap</button><button class="btn btn-primary" id="copyBtn" type="button">⧉ Copiar prompt</button></div></header>
-    <section class="grid-main"><div class="card"><div class="card-title"><div class="icon-box">☰</div><div><h2>Variables principales</h2><p>Primero eliges el género principal. Luego decides si quieres percusión, fusiones, instrumentos y una personalización adicional escrita por ti.</p></div></div><div class="form-grid" id="selectFields"></div><div class="form-grid three"><label><span>BPM opcional</span><input id="bpm" placeholder="Ej: 86" /></label><label><span>Tonalidad opcional</span><input id="key" placeholder="Ej: F minor" /></label><label><span>Año / época</span><input id="eraYear" placeholder="Ej: 1996, 2003, 2012" /></label></div><div class="chip-section"><div class="chip-editor"><h3>Géneros a fusionar</h3><p>Son influencias secundarias. No reemplazan el género principal; solo orientan el color musical.</p><div class="chips" id="fusionGenresChips"></div><div class="chip-input-row"><input id="newFusionGenre" placeholder="Ej: Neo Soul, Gospel, Jazz, Drill, Afrobeat" /><button class="chip-add" id="addFusionGenre" type="button">+</button></div></div><div class="chip-editor"><h3>Instrumentos o sonidos a usar</h3><p>Agrega instrumentos, texturas o capas que SUNO debería intentar incluir en la extensión.</p><div class="chips" id="instrumentsChips"></div><div class="chip-input-row"><input id="newInstrument" placeholder="Ej: contrabajo, saxofón, moog bass, strings, vinyl crackle" /><button class="chip-add" id="addInstrument" type="button">+</button></div></div><div class="chip-editor"><h3>Personalización adicional</h3><p>Escribe cualquier indicación especial que quieras añadir al prompt.</p><textarea id="customInstruction" rows="4" placeholder="Ej: quiero que haya un solo de violín virtuoso en una sección breve, musical y coherente con el loop original"></textarea></div></div></div><div class="card"><div class="card-title"><div class="icon-box alt">✦</div><div><h2>Prompt final en inglés</h2><p>Salida lista para copiar y pegar en SUNO. Máximo: 1000 caracteres.</p></div></div><div class="output-box"><div class="char-counter" id="charCounter">0/1000 caracteres</div><div id="promptOutput"></div></div></div></section>
-    <section class="card fine-card"><div class="card-title"><div class="icon-box full">♫</div><div><h2>Detalle fino del prompt</h2><p>Aquí defines estructura, atmósfera, emoción, restricciones, preservación del loop, objetivo de los stems y cualquier personalización especial.</p></div></div><div class="fine-grid" id="textareaFields"></div></section>
+    <header>
+      <section>
+        <div class="brand-pill"><span>✦</span><span>SUNO Prompt Lab</span></div>
+        <div class="title-row">
+          <div class="logo-box"><img id="brandLogoMain" class="logo" alt="SUNO" /></div>
+          <h1>Generador de prompts para SUNO</h1>
+        </div>
+        <p class="subtitle">Define un género principal y agrega los géneros a fusionar e instrumentos por separado. Interfaz en español, prompt final en inglés. Ahora con presets guardables, historial y autocompletado.</p>
+      </section>
+      <div class="actions">
+        <button class="btn btn-secondary" id="resetBtn" type="button">↻ Preset Boom Bap</button>
+        <button class="btn btn-primary" id="copyBtn" type="button">⧉ Copiar prompt</button>
+      </div>
+    </header>
+
+    <!-- Presets panel -->
+    <div class="card presets-panel" style="margin-bottom:24px">
+      <div class="card-title" style="margin-bottom:0">
+        <div class="icon-box preset-ico">★</div>
+        <div>
+          <h2>Mis presets</h2>
+          <p>Guarda tu configuración actual con un nombre para reutilizarla luego.</p>
+        </div>
+      </div>
+      <div class="preset-list" id="presetList"></div>
+      <div class="preset-save-row">
+        <input id="presetNameInput" placeholder="Nombre del preset (ej: Trap oscuro 2003)" />
+        <button class="btn btn-secondary" id="savePresetBtn" type="button">+ Guardar preset actual</button>
+      </div>
+    </div>
+
+    <section class="grid-main">
+      <div class="card">
+        <div class="card-title">
+          <div class="icon-box">☰</div>
+          <div>
+            <h2>Variables principales</h2>
+            <p>Primero eliges el género principal. Luego decides si quieres percusión, fusiones, instrumentos y una personalización adicional.</p>
+          </div>
+        </div>
+        <div class="form-grid" id="selectFields"></div>
+        <div class="form-grid three">
+          <label><span>BPM</span><select id="bpm"><option value="">— Sin especificar —</option><optgroup label="Muy lento (40–69)"><option>40</option><option>50</option><option>60</option><option>65</option><option>68</option></optgroup><optgroup label="Lento / Lo-fi (70–84)"><option>70</option><option>72</option><option>74</option><option>76</option><option>78</option><option>80</option><option>82</option><option>84</option></optgroup><optgroup label="Medio-bajo / Boom Bap (85–95)"><option>85</option><option>86</option><option>87</option><option>88</option><option>89</option><option>90</option><option>91</option><option>92</option><option>93</option><option>94</option><option>95</option></optgroup><optgroup label="Medio / Hip Hop / R&B (96–110)"><option>96</option><option>97</option><option>98</option><option>99</option><option>100</option><option>102</option><option>104</option><option>105</option><option>108</option><option>110</option></optgroup><optgroup label="Medio-alto / Trap (120–145)"><option>120</option><option>125</option><option>130</option><option>135</option><option>138</option><option>140</option><option>142</option><option>145</option></optgroup><optgroup label="Rápido / House / Techno (120–160)"><option>122</option><option>124</option><option>126</option><option>128</option><option>132</option><option>136</option><option>148</option><option>150</option><option>155</option><option>160</option></optgroup><optgroup label="Muy rápido / DNB / Punk (165–200)"><option>165</option><option>170</option><option>174</option><option>175</option><option>180</option><option>190</option><option>200</option></optgroup></select></label>
+          <label><span>Tonalidad</span><select id="key"><option value="">— Sin especificar —</option><optgroup label="Mayores"><option>C major</option><option>C# major</option><option>D major</option><option>D# major</option><option>E major</option><option>F major</option><option>F# major</option><option>G major</option><option>G# major</option><option>A major</option><option>A# major</option><option>B major</option></optgroup><optgroup label="Menores"><option>C minor</option><option>C# minor</option><option>D minor</option><option>D# minor</option><option>E minor</option><option>F minor</option><option>F# minor</option><option>G minor</option><option>G# minor</option><option>A minor</option><option>A# minor</option><option>B minor</option></optgroup><optgroup label="Escalas especiales"><option>C dorian</option><option>D dorian</option><option>E dorian</option><option>G dorian</option><option>A dorian</option><option>D phrygian</option><option>E phrygian</option><option>A phrygian</option><option>C lydian</option><option>F lydian</option><option>G mixolydian</option><option>A mixolydian</option><option>A locrian</option><option>C pentatonic major</option><option>A pentatonic minor</option><option>D blues scale</option><option>A blues scale</option><option>E blues scale</option></optgroup></select></label>
+          <label><span>Año / época</span><select id="eraYear"><option value="">— Sin especificar —</option><optgroup label="Décadas clásicas"><option>1950s</option><option>1960s</option><option>1970s</option><option>1980s</option></optgroup><optgroup label="Años 90"><option>1990</option><option>1991</option><option>1992</option><option>1993</option><option>1994</option><option>1995</option><option>1996</option><option>1997</option><option>1998</option><option>1999</option></optgroup><optgroup label="Años 2000"><option>2000</option><option>2001</option><option>2002</option><option>2003</option><option>2004</option><option>2005</option><option>2006</option><option>2007</option><option>2008</option><option>2009</option></optgroup><optgroup label="Años 2010"><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option><option>2018</option><option>2019</option></optgroup><optgroup label="Años 2020"><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option></optgroup></select></label>
+        </div>
+        <div class="chip-section">
+          <div class="chip-editor">
+            <h3>Géneros a fusionar</h3>
+            <p>Influencias secundarias que orientan el color musical sin reemplazar el género principal.</p>
+            <div class="chips" id="fusionGenresChips"></div>
+            <div class="chip-input-row">
+              <input id="newFusionGenre" placeholder="Ej: Neo Soul, Gospel, Jazz, Drill, Afrobeat" autocomplete="off" />
+              <button class="chip-add" id="addFusionGenre" type="button">+</button>
+              <div class="autocomplete-list" id="acFusion" style="display:none"></div>
+            </div>
+          </div>
+          <div class="chip-editor">
+            <h3>Instrumentos o sonidos a usar</h3>
+            <p>Instrumentos, texturas o capas que SUNO debería intentar incluir.</p>
+            <div class="chips" id="instrumentsChips"></div>
+            <div class="chip-input-row">
+              <input id="newInstrument" placeholder="Ej: contrabajo, saxofón, moog bass, strings, vinyl crackle" autocomplete="off" />
+              <button class="chip-add" id="addInstrument" type="button">+</button>
+              <div class="autocomplete-list" id="acInstrument" style="display:none"></div>
+            </div>
+          </div>
+          <div class="chip-editor">
+            <h3>Personalización adicional</h3>
+            <p>Cualquier indicación especial que quieras añadir al prompt.</p>
+            <textarea id="customInstruction" rows="4" placeholder="Ej: quiero que haya un solo de violín virtuoso en una sección breve, musical y coherente con el loop original"></textarea>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.18);margin:24px 0 20px"></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <div class="icon-box full" style="width:36px;height:36px;border-radius:14px;font-size:18px">♫</div>
+          <div><h2 style="margin:0;font-size:18px">Detalle fino</h2><p style="margin:2px 0 0;color:rgba(255,255,255,.7);font-size:13px">Atmósfera, estructura, mezcla, stems y restricciones.</p></div>
+        </div>
+        <div class="fine-grid" id="textareaFields"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <div class="icon-box alt">✦</div>
+          <div>
+            <h2>Prompt final en inglés</h2>
+            <p>Salida lista para copiar y pegar en SUNO. Máximo: 1000 caracteres.</p>
+          </div>
+        </div>
+        <div class="output-box">
+          <div class="char-counter" id="charCounter">0/1000 caracteres</div>
+          <div id="promptOutput"></div>
+        </div>
+        <div class="truncation-warning" id="truncationWarning">
+          <strong>⚠ Prompt truncado — secciones excluidas por límite de 1000 caracteres:</strong>
+          <div id="truncationDetail"></div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- History panel -->
+    <div class="history-panel card">
+      <div class="card-title" style="margin-bottom:0">
+        <div class="icon-box hist">◷</div>
+        <div>
+          <h2>Historial de prompts</h2>
+          <p>Últimos 8 prompts generados en esta sesión. Haz clic en uno para copiarlo.</p>
+        </div>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
   </main>
+
   <div class="toast" id="toast">Prompt copiado</div>
+
   <script>
     const SUNO_LOGO_DATA="data:image/webp;base64,UklGRmwDAABXRUJQVlA4IGADAABwEwCdASpgAGAAPp1In0qlpKMnKduY+OATiWgAwroNWd6Tfm/yM9ou2+D6Ln5YXSX52D+5/tHrEH7AezB0vX+qYPhVe07QVggxS3E96OpCJBJYXhYaHZDT19wNwIiXIjZ3nrqGLfqWEe3X3SlDg1GjHqO/kYsJ9hYAcBpF/VKiJAqCoagRphSAichV+MjwjnS4gvBr8bkOTSxMNfkZZW632JpeAAD+7unf+3Z/VofXZ/oof5Z7zD3eqO8UAqmpFg5jiUwW+hp/6WFi5M2bd4xl5FyxZjSnt1ycip9d+sKSRrkeLxyLT66/vYEK8ZPxKLfzxMplSCMl45Ntq2HgLLOcGlWpEqGs1DofrC6a8LN2LJsGqmB0zH/Kan4P1hvA5yScj0gJV/kSo7PyqUUG9MQ03aH/O1F3E12BZqbsi1GosBZvHBc11TGP+JP0wgueEwMfOX9Pd3JsmpfHYWdrITHpMFE5R0NGVlsNYFTfcKZvTQqGRI80Ndp/F+/ENihYzaOLuf6StfUyJBiHa5f48EQGJGH6/NDrAAD4t1gwBXr1KtMNQtlS08u2/BLrxdXwqTItSxZnVxLi0Da63vfr/fHiPa24Lr8kShyuYtBsS3XYFmczsJ2QAcRTHSWaqNJCq8F3hwXmrAv+GqouZRo+vvx78yAqljBSZNJdNkWt9Q9ux+l/RwXuyzMp/rHdygO42DzD7oJ3jT3fUEQ7z5fcNNQgXci+/lrfHO8ylLLn8qUB2iyo5dVfNaC7Nnd3BprW7o+lIb45E1uhaAjUZmEdh77lJvw2WNehc05RO/33b4oBy1hoYp+wnvLmxshuRE2m29G73D8ChYHnaXBWKQBk9NEY1BURTcJ4X7s27bsTeof3TMAuLD2mvrW5JdWQvgk4/B5jdEW6zwuURxWKR1j+Wtkybb6PuDXDYYm4zgz5wwOrK6G5fkmqXyFInoRrquLA2dBHVL8K500DdmEAFe6h9rwdMJ9q/UNTRpT4aX/pbr+rAbiqdyHVYR8tlKnXSsqW6q4sLNNX/bIMv7X4E6ZsJ7csEqcLdF0PDbTnIXuACNC/vPu/FaS3HfwUrf7M0vQLU6MTCpb/pVDabFktQQHm81BM59J+yzaLQby2BwRgew/HPkaqHiiy9KFLNVxU9/WgAAA=";
-    const initialState={mode:"Extend",model:"v5.5",percussionMode:"Con percusión",mainUse:"Extender un loop propio para extraer stems y reinsertarlos en FL Studio",genre:"Boom Bap",fusionGenres:["Soul","Jazz Rap","Lo-fi Hip Hop"],instruments:["Rhodes eléctrico","bajo cálido","batería con swing","piano melancólico","textura de vinilo"],subStyle:"sample-based, underground, soulful, dusty",bpm:"",key:"",eraYear:"1996",atmosphere:"nocturna, cinematográfica, underground, con textura analógica",emotionIntent:"nostalgia, tensión elegante, introspección y crudeza callejera",mood:"oscuro, nostálgico, callejero, elegante",referenceEnergy:"medio",audioInfluence:"alto",styleInfluence:"medio-bajo",creativity:"controlada",structure:"intro corta, verso, hook, variación, outro",preserve:"groove, BPM, tonalidad, swing, sample principal y atmósfera original",addElements:"bajo cálido, fills de batería, texturas vinilo, pads sutiles, chops vocales ambientales",avoid:"EDM, pop comercial, voces exageradas, cambios bruscos de tonalidad, drums genéricos, sonido demasiado IA",stemGoal:"rescatar bajos alternativos, ambientes, fills, melodías secundarias y texturas",vocalOption:"Solo instrumental",mixDirection:"mezcla moderna limpia con textura clásica cruda",outputLength:"Extensión corta a media",customInstruction:"",notes:"Debe sonar como material sampleable, no como canción final."};
+
+    const GENRE_SUGGESTIONS=["Soul","Jazz Rap","Lo-fi Hip Hop","Neo Soul","Gospel","Jazz","Drill","Afrobeat","Funk","R&B","Blues","Reggae","Dancehall","Trap Soul","Emo Rap","Cloud Rap","Phonk","Memphis Rap","Detroit Rap","Griselda","90s Boom Bap","Chopped & Screwed","Electro Soul","Gospel Rap","Latin Trap","Dembow","Reggaeton","Cumbia","Salsa","Bossa Nova","Afro Cuban","Cumbia Villera","Nu Jazz","Jazz Fusion","Spiritual Jazz","Modal Jazz","Free Jazz","Post-Bop","Hard Bop","Cool Jazz","West Coast Jazz","East Coast Jazz"];
+    const INSTRUMENT_SUGGESTIONS=["Rhodes eléctrico","bajo cálido","batería con swing","piano melancólico","textura de vinilo","contrabajo","saxofón","moog bass","strings","vinyl crackle","trompeta","trombón","flauta","guitarra acústica","guitarra eléctrica","bajo fretless","sitar","kora","balafón","vibráfono","marimba","celesta","clavicémbalo","órgano Hammond","mellotron","theremin","vocoder","choir pads","reverse reverb","lo-fi drums","808 bass","tabla","djembe","congas","timbales","cuíca","cuatro","charango","bandoneón","arpa","cello","viola","violín"];
+
+    const initialState={mode:"Extend",model:"v5.5",percussionMode:"Con percusión",mainUse:"Extender un loop propio para extraer stems",genre:"Boom Bap",fusionGenres:["Soul","Jazz Rap","Lo-fi Hip Hop"],instruments:["Rhodes eléctrico","bajo cálido","batería con swing","piano melancólico","textura de vinilo"],subStyle:"sample-based, underground, soulful, dusty",bpm:"90",key:"F minor",eraYear:"1996",atmosphere:"nocturna, cinematográfica, underground, analógica",emotionIntent:"nostalgia, tensión elegante, introspección, crudeza",mood:"oscuro, nostálgico, callejero, elegante",referenceEnergy:"medio",audioInfluence:"alto",styleInfluence:"medio-bajo",creativity:"controlada",structure:"intro corta, verso, hook, variación, outro",preserve:"groove, BPM, tonalidad, swing, sample principal y atmósfera",addElements:"bajo cálido, fills de batería, texturas vinilo, pads sutiles, chops vocales",avoid:"EDM, pop comercial, voces exageradas, cambios bruscos, drums genéricos",stemGoal:"rescatar bajos alternativos, ambientes, fills, melodías secundarias y texturas",vocalOption:"Solo instrumental",mixDirection:"mezcla moderna limpia con textura clásica cruda",outputLength:"Extensión corta a media",customInstruction:"",notes:"Debe sonar como material sampleable, no como canción final."};
+
     let state=JSON.parse(JSON.stringify(initialState));
-    const translateValue=v=>({"muy alto":"very high",alto:"high",medio:"medium",bajo:"low","medio-bajo":"medium-low","muy controlada":"very controlled",controlada:"controlled",media:"medium",experimental:"experimental",agresivo:"aggressive",cinematográfico:"cinematic","Solo instrumental":"instrumental only","Solo chops vocales sutiles":"subtle vocal chops only","Voz de referencia para hook":"hook reference vocal","Voz guía rapeada":"rap guide vocal","Solo texturas vocales de fondo":"background vocal textures only","Extensión corta":"short extension","Extensión corta a media":"short-to-medium extension","Arreglo completo":"full arrangement","Solo sección de hook":"hook section only","Solo intro/outro":"intro/outro only"}[v]||v);
-    const selectFields=[{key:"mode",label:"Modo SUNO",options:["Extend","Cover","Create","Remix / Variation"]},{key:"model",label:"Modelo",options:["v5.5","v5","Custom Model"]},{key:"genre",label:"Género principal",options:["Boom Bap","Boom Trap","Trap","Detroit","Lo-fi Hip Hop","R&B","Soulful Rap","Experimental Hip Hop"]},{key:"percussionMode",label:"Percusión",options:["Con percusión","Sin percusión / solo melodía"]},{key:"audioInfluence",label:"Influencia del audio",options:["muy alto","alto","medio","bajo"]},{key:"styleInfluence",label:"Influencia del estilo",options:["alto","medio","medio-bajo","bajo"]},{key:"creativity",label:"Creatividad",options:["muy controlada","controlada","media","experimental"]},{key:"referenceEnergy",label:"Energía",options:["bajo","medio","alto","agresivo","cinematográfico"]},{key:"vocalOption",label:"Dirección vocal",options:["Solo instrumental","Solo chops vocales sutiles","Voz de referencia para hook","Voz guía rapeada","Solo texturas vocales de fondo"]},{key:"outputLength",label:"Duración sugerida",options:["Extensión corta","Extensión corta a media","Arreglo completo","Solo sección de hook","Solo intro/outro"]}];
-    const textareaFields=[{key:"mainUse",label:"Objetivo de uso"},{key:"subStyle",label:"Subestilo / textura"},{key:"mood",label:"Mood / color musical"},{key:"atmosphere",label:"Atmósfera"},{key:"emotionIntent",label:"Emoción que se quiere transmitir"},{key:"structure",label:"Estructura deseada"},{key:"preserve",label:"Qué debe preservar del loop"},{key:"addElements",label:"Qué puede agregar"},{key:"avoid",label:"Qué debe evitar"},{key:"stemGoal",label:"Objetivo al extraer stems"},{key:"mixDirection",label:"Dirección de mezcla"},{key:"notes",label:"Notas finales"}];
-    const selectFieldsEl=document.getElementById("selectFields"),textareaFieldsEl=document.getElementById("textareaFields"),promptOutput=document.getElementById("promptOutput"),charCounter=document.getElementById("charCounter"),toast=document.getElementById("toast");document.getElementById("brandLogoMain").src=SUNO_LOGO_DATA;
+    let promptHistory=[];
+
+    const STORAGE_KEY="suno_state_v1";
+    const PRESETS_KEY="suno_presets_v1";
+    const HISTORY_KEY="suno_history_v1";
+
+    function saveToStorage(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));localStorage.setItem(HISTORY_KEY,JSON.stringify(promptHistory))}catch(e){}}
+    function loadFromStorage(){try{const s=localStorage.getItem(STORAGE_KEY);if(s){const parsed=JSON.parse(s);state=Object.assign({},initialState,parsed)}const h=localStorage.getItem(HISTORY_KEY);if(h){promptHistory=JSON.parse(h)}}catch(e){}}
+    function loadPresets(){try{const p=localStorage.getItem(PRESETS_KEY);return p?JSON.parse(p):{}}catch(e){return{}}}
+    function savePresets(presets){try{localStorage.setItem(PRESETS_KEY,JSON.stringify(presets))}catch(e){}}
+
+    
+
+    const selectFields=[{key:"mode",label:"Modo SUNO",options:["Extend","Cover","Create","Remix / Variation"]},{key:"model",label:"Modelo",options:["v5.5","v5","Custom Model"]},{key:"genre",label:"Género principal",options:["— Hip Hop —","Boom Bap","Boom Trap","Trap","Detroit Rap","Lo-fi Hip Hop","R&B","Soulful Rap","Drill","Cloud Rap","Phonk","Memphis Rap","Experimental Hip Hop","— Electrónica —","House","Deep House","Tech House","Techno","Ambient Techno","Trance","Drum & Bass","Jungle","IDM","Ambient","Downtempo","Trip Hop","Future Bass","Synthwave","Darkwave","Chillwave","Vaporwave","Noise","Industrial","— Rock y derivados —","Rock","Indie Rock","Alternative Rock","Post-Rock","Shoegaze","Dream Pop","Emo","Math Rock","Prog Rock","Psychedelic Rock","Heavy Metal","Black Metal","Folk Rock","— Jazz y Soul —","Jazz","Bebop","Nu Jazz","Jazz Fusion","Soul","Neo Soul","Gospel","Blues","Funk","Smooth Jazz","— Música del mundo —","Bossa Nova","Samba","Cumbia","Salsa","Reggaeton","Dembow","Afrobeats","Afrobeat","Dancehall","Reggae","Flamenco","Fado","Tango","Folklore Andino","Música Árabe","— Clásica y orquestal —","Clásica contemporánea","Minimalismo","Neoclásica","Música de cámara","Orquestal épica","Ambient orquestal","— Pop —","Pop","Synth Pop","Electropop","K-Pop","Art Pop","Chamber Pop","— Otros —","Spoken Word","Experimental","Noise Ambient","Freestyle"]},{key:"percussionMode",label:"Percusión",options:["Con percusión","Sin percusión / solo melodía"]},{key:"audioInfluence",label:"Influencia del audio",options:["muy alto","alto","medio","bajo"]},{key:"styleInfluence",label:"Influencia del estilo",options:["alto","medio","medio-bajo","bajo"]},{key:"creativity",label:"Creatividad",options:["muy controlada","controlada","media","experimental"]},{key:"referenceEnergy",label:"Energía",options:["bajo","medio","alto","agresivo","cinematográfico"]},{key:"vocalOption",label:"Dirección vocal",options:["Solo instrumental","Solo chops vocales sutiles","Voz de referencia para hook","Voz guía rapeada","Solo texturas vocales de fondo"]},{key:"outputLength",label:"Duración sugerida",options:["Extensión corta","Extensión corta a media","Arreglo completo","Solo sección de hook","Solo intro/outro"]}];
+    const fineFields=[{key:"mainUse",label:"Objetivo de uso",options:["Extender un loop propio para extraer stems","Crear una pista desde cero para rapear encima","Generar material para samplear y reinterpretar","Producir una canción completa con estructura","Crear una demo instrumental para cliente","Explorar texturas y atmósferas de producción","Generar stems separados para FL Studio / DAW","Prototipo rápido de idea musical","Cover o versión alternativa de referencia","Producción para sincronización / licensing"]},{key:"subStyle",label:"Subestilo / textura",options:["sample-based, underground, soulful, dusty","dark and gritty, raw, lo-fi crunch","clean and polished, modern trap","boom bap clásico, crates digging aesthetic","ambient y etéreo, expansivo","jazz-inflected, melodic, chord-heavy","funk-driven, groove-heavy, pocket feel","drill melódico, 808 melancholic","neo soul electroacústico, warmth-forward","cinematic, orquestal, emotivo","synthwave retro, análogo, neon mood","house groovy, percusivo, dancefloor","experimental, textured, no estructurado"]},{key:"mood",label:"Mood / color musical",options:["oscuro, nostálgico, callejero, elegante","melancólico, introspectivo, íntimo","agresivo, tenso, confrontacional","eufórico, energético, poderoso","relajado, flotante, dreamy","romántico, suave, cálido","épico, cinematográfico, grandioso","misterioso, suspense, oscuro ambient","alegre, luminoso, positivo","triste, vulnerable, desnudo","contemplativo, filosófico, nocturno","frenético, caótico, urgente"]},{key:"atmosphere",label:"Atmósfera",options:["nocturna, cinematográfica, underground, analógica","urbana, callejera, húmeda, noche de ciudad","rural, abierta, naturaleza, orgánica","espacial, infinita, cósmica","industrial, fría, mecánica, post-apocalíptica","vintage, analógica, warmth de vinilo","tropical, húmeda, colorida, sensorial","minimalista, vacía, austera","subterránea, club, bass pesado","onírica, surreal, distorsionada","sacra, espiritual, etérea","doméstica, íntima, cuarto pequeño"]},{key:"emotionIntent",label:"Emoción que se transmite",options:["nostalgia, tensión elegante, introspección, crudeza","tristeza, pérdida, añoranza, melancolía profunda","rabia, frustración, rebeldía, fuerza bruta","euforia, celebración, alegría desbordante","ansiedad, incertidumbre, inquietud, tensión","serenidad, paz, aceptación, quietud","amor, vulnerabilidad, intimidad, deseo","miedo, paranoia, oscuridad, claustrofobia","esperanza, resiliencia, superación, luz al final","orgullo, determinación, poder personal","soledad, aislamiento, vacío existencial","admiración, asombro, grandiosidad"]},{key:"structure",label:"Estructura deseada",options:["intro corta, verso, hook, variación, outro","intro larga ambiental, verso, pre-hook, hook, bridge, outro","loop continuo sin estructura definida","A-B-A (verso-coro-verso)","intro, verso 1, verso 2, hook, verso 3, outro","solo instrumental progresivo sin cortes","estructura minimalista: intro, desarrollo, cierre","hook-first: hook, verso, hook, bridge, hook","two-part: sección A intensa / sección B resuelta","free-form: evolución orgánica sin secciones fijas"]},{key:"preserve",label:"Qué debe preservar",options:["groove, BPM, tonalidad, swing, sample principal y atmósfera","el loop base exacto sin alterarlo demasiado","la melodía principal y su fraseo original","el groove de la batería y el pocket rítmico","la tonalidad y las progresiones de acordes","la textura general y el color tonal","la energía y dinámica de la referencia","el carácter vocal si existe en el original","los elementos de bajo y frecuencias graves","nada específico, libertad creativa total"]},{key:"addElements",label:"Qué puede agregar",options:["bajo cálido, fills de batería, texturas vinilo, pads sutiles, chops vocales","cuerdas en background, contramelodías de vientos","percusión adicional, shakers, hi-hats alternativos","capas de sintetizadores ambientales y texturas","armonías vocales sutiles de fondo","efectos de transición, risers, downlifters","líneas de bajo adicionales, variaciones 808","acordes de piano o Rhodes como relleno armónico","elementos de field recording, sonidos de ambiente","nada extra, mantener minimalismo del original"]},{key:"avoid",label:"Qué debe evitar",options:["EDM, pop comercial, voces exageradas, cambios bruscos, drums genéricos","sonido demasiado limpio o over-producido","drops de EDM, sidechaining agresivo","metales excesivos, orquestación exagerada","cambios de tonalidad no solicitados","velocidad excesiva, breaks caóticos","sintetizadores chillout genéricos tipo spotify","reverb excesivo, sonido lavado","imitación directa de artistas conocidos","clichés del género, sonidos de librería genérica","ruido no musical, distorsión no intencionada"]},{key:"stemGoal",label:"Objetivo de los stems",options:["rescatar bajos alternativos, ambientes, fills, melodías secundarias y texturas","obtener drums limpios para reemplazar los originales","aislar líneas melódicas para samplear fragmentos","extraer pads y texturas para capas de fondo","separar bajo para procesar con efectos propios","conseguir variaciones del loop para edición","obtener elementos que no están en el original","generar material de transición entre secciones","crear versiones acapella o instrumentales limpias","no es prioritario extraer stems"]},{key:"mixDirection",label:"Dirección de mezcla",options:["mezcla moderna limpia con textura clásica cruda","lo-fi intencionado: saturación, hiss, graves gruesos","mezcla cinematográfica: dinámica amplia, espacios grandes","clubbing: kick y bajo al frente, mezcla plana y fuerte","íntima y cercana: todo en primer plano, sin reverb excesivo","vintage análogo: warmth de cinta, compresión suave","limpia y transparente: headroom amplio, sin saturación","radio-ready: comprimida, brillante, loudness-forward","experimental: mezcla fuera de lo convencional","espacial: mucho reverb y delay, sonido abierto"]},{key:"notes",label:"Notas finales",options:["Debe sonar como material sampleable, no como canción final.","Priorizar coherencia musical sobre originalidad forzada.","Que no suene a IA genérica, sino a producción humana real.","Mantener el carácter underground, no comercializar el sonido.","El resultado debe ser apto para mezclar en sets en vivo.","Inspiración en productores reales pero sin copiar directamente.","Usar referencias de la época indicada sin ser literal.","La extensión debe fluir naturalmente del loop original.","Dejar espacio para que el rapeo o voz encaje bien encima.","Sin restricciones, máxima libertad interpretativa para SUNO."]}];
+
+    const selectFieldsEl=document.getElementById("selectFields");
+    const textareaFieldsEl=document.getElementById("textareaFields");
+    const promptOutput=document.getElementById("promptOutput");
+    const charCounter=document.getElementById("charCounter");
+    const toast=document.getElementById("toast");
+    const truncationWarning=document.getElementById("truncationWarning");
+    const truncationDetail=document.getElementById("truncationDetail");
+    const historyList=document.getElementById("historyList");
+    const presetList=document.getElementById("presetList");
+
+    document.getElementById("brandLogoMain").src=SUNO_LOGO_DATA;
+
     function escapeHtml(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-    function renderSelects(){selectFieldsEl.innerHTML=selectFields.map(field=>`<label><span>${field.label}</span><select id="${field.key}">${field.options.map(option=>`<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join("")}</select></label>`).join("");selectFields.forEach(field=>{const element=document.getElementById(field.key);element.value=state[field.key];element.addEventListener("change",event=>{state[field.key]=event.target.value;renderPrompt()})})}
-    function renderTextareas(){textareaFieldsEl.innerHTML=textareaFields.map(field=>`<label><span>${field.label}</span><textarea id="${field.key}" rows="3"></textarea></label>`).join("");textareaFields.forEach(field=>{const element=document.getElementById(field.key);element.value=state[field.key];element.addEventListener("input",event=>{state[field.key]=event.target.value;renderPrompt()})})}
-    function renderChips(arrayKey,containerId){const container=document.getElementById(containerId);if(!state[arrayKey].length){container.innerHTML=`<span style="color:rgba(255,255,255,.55);font-size:14px;">Sin elementos agregados.</span>`;return}container.innerHTML=state[arrayKey].map((item,index)=>`<span class="chip">${escapeHtml(item)}<button type="button" data-array="${arrayKey}" data-index="${index}">×</button></span>`).join("");container.querySelectorAll("button").forEach(button=>{button.addEventListener("click",()=>{const key=button.dataset.array;const index=Number(button.dataset.index);state[key].splice(index,1);renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");renderPrompt()})})}
-    function addChip(arrayKey,inputId,containerId){const input=document.getElementById(inputId);const value=input.value.trim();if(!value)return;if(!state[arrayKey].includes(value)){state[arrayKey].push(value)}input.value="";renderChips(arrayKey,containerId);renderPrompt()}
-    function buildPromptByPriority(){const clean=value=>String(value||"").trim();const join=items=>items.filter(Boolean).join(", ");const maxChars=1000;const essentialParts=[`${state.mode} / ${state.model}.`,`Main genre: ${state.genre}.`,state.fusionGenres.length?`Fuse with: ${join(state.fusionGenres)}.`:"",`Style: ${clean(state.subStyle)}.`,state.bpm?`Tempo: ${state.bpm} BPM.`:"Keep original tempo.",state.key?`Key: ${state.key}.`:"Keep original key.",state.eraYear?`Era: inspired by ${state.eraYear}, no artist/song copying.`:"",clean(state.atmosphere)?`Atmosphere: ${clean(state.atmosphere)}.`:"",clean(state.emotionIntent)?`Emotion: ${clean(state.emotionIntent)}.`:"",state.percussionMode==="Sin percusión / solo melodía"?"No drums/percussion; focus on melody, harmony, atmosphere and sampleable layers.":"Drums/percussion allowed, tasteful and supportive.",state.instruments.length?`Instruments/textures: ${join(state.instruments)}.`:"",clean(state.customInstruction)?`Custom: ${clean(state.customInstruction)}. Make it natural and coherent.`:"",`Vocal: ${translateValue(state.vocalOption)}.`,`Audio influence: ${translateValue(state.audioInfluence)}. Creativity: ${translateValue(state.creativity)}.`];const optionalParts=[clean(state.preserve)?`Preserve: ${clean(state.preserve)}.`:"",clean(state.structure)?`Structure: ${clean(state.structure)}.`:"",clean(state.mood)?`Mood: ${clean(state.mood)}.`:"",clean(state.addElements)?`Add: ${clean(state.addElements)}.`:"",clean(state.mixDirection)?`Mix: ${clean(state.mixDirection)}.`:"",clean(state.avoid)?`Avoid: ${clean(state.avoid)}.`:"",clean(state.stemGoal)?`Stem goal: ${clean(state.stemGoal)}.`:"",clean(state.notes)?`Notes: ${clean(state.notes)}.`:""];let prompt="";function addPart(part){if(!part)return;const cleanedPart=part.replaceAll("\n"," ").replace(/\s+/g," ").trim();const candidate=prompt?`${prompt} ${cleanedPart}`:cleanedPart;if(candidate.length<=maxChars){prompt=candidate}}essentialParts.forEach(addPart);optionalParts.forEach(addPart);return prompt.replaceAll("\n"," ").replace(/\s+/g," ").trim()}
-    function renderPrompt(){const prompt=buildPromptByPriority();promptOutput.textContent=prompt;charCounter.textContent=`${prompt.length}/1000 caracteres`}
-    function resetApp(){state=JSON.parse(JSON.stringify(initialState));renderSelects();renderTextareas();["bpm","key","eraYear","customInstruction"].forEach(id=>{document.getElementById(id).value=state[id]});renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");renderPrompt()}
-    async function copyPrompt(){const prompt=buildPromptByPriority();try{await navigator.clipboard.writeText(prompt)}catch(error){const temp=document.createElement("textarea");temp.value=prompt;document.body.appendChild(temp);temp.select();document.execCommand("copy");temp.remove()}toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1500)}
-    function bindSimpleInputs(){["bpm","key","eraYear","customInstruction"].forEach(id=>{const element=document.getElementById(id);element.value=state[id];element.addEventListener("input",event=>{state[id]=event.target.value;renderPrompt()})})}
-    function bindChipInputs(){document.getElementById("addFusionGenre").addEventListener("click",()=>{addChip("fusionGenres","newFusionGenre","fusionGenresChips")});document.getElementById("addInstrument").addEventListener("click",()=>{addChip("instruments","newInstrument","instrumentsChips")});[["newFusionGenre","fusionGenres","fusionGenresChips"],["newInstrument","instruments","instrumentsChips"]].forEach(([inputId,arrayKey,containerId])=>{document.getElementById(inputId).addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();addChip(arrayKey,inputId,containerId)}})})}
-    function init(){renderSelects();renderTextareas();bindSimpleInputs();bindChipInputs();renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");document.getElementById("copyBtn").addEventListener("click",copyPrompt);document.getElementById("resetBtn").addEventListener("click",resetApp);renderPrompt()}init();
+
+    function renderSelects(){
+      selectFieldsEl.innerHTML=selectFields.map(field=>`<label><span>${field.label}</span><select id="${field.key}">${field.options.map(option=>{const isSep=option.startsWith("—")&&option.endsWith("—");return`<option value="${isSep?"":escapeHtml(option)}" ${isSep?'disabled style="color:rgba(255,200,80,.7);font-weight:800;background:#5a1a00"':''}>${escapeHtml(option)}</option>`}).join("")}</select></label>`).join("");
+      selectFields.forEach(field=>{const element=document.getElementById(field.key);element.value=state[field.key];element.addEventListener("change",event=>{if(!event.target.value)return;state[field.key]=event.target.value;saveToStorage();renderPrompt()})})
+    }
+
+    function renderFineSelects(){
+      textareaFieldsEl.innerHTML=fineFields.map(field=>`<label><span>${field.label}</span><select id="${field.key}">${field.options.map(opt=>`<option value="${escapeHtml(opt)}">${escapeHtml(opt)}</option>`).join("")}</select></label>`).join("");
+      fineFields.forEach(field=>{const el=document.getElementById(field.key);el.value=state[field.key]||field.options[0];el.addEventListener("change",event=>{state[field.key]=event.target.value;saveToStorage();renderPrompt()})})
+    }
+
+    function renderChips(arrayKey,containerId){
+      const container=document.getElementById(containerId);
+      if(!state[arrayKey].length){container.innerHTML=`<span style="color:rgba(255,255,255,.55);font-size:14px;">Sin elementos agregados.</span>`;return}
+      container.innerHTML=state[arrayKey].map((item,index)=>`<span class="chip">${escapeHtml(item)}<button type="button" data-array="${arrayKey}" data-index="${index}">×</button></span>`).join("");
+      container.querySelectorAll("button").forEach(button=>{button.addEventListener("click",()=>{const key=button.dataset.array;const index=Number(button.dataset.index);state[key].splice(index,1);renderChips("fusionGenres","fusionGenresChips");renderChips("instruments","instrumentsChips");saveToStorage();renderPrompt()})})
+    }
+
+    function addChip(arrayKey,inputId,containerId){
+      const input=document.getElementById(inputId);const value=input.value.trim();if(!value)return;
+      if(!state[arrayKey].includes(value)){state[arrayKey].push(value)}
+      input.value="";
+      hideAutocomplete(inputId==="newFusionGenre"?"acFusion":"acInstrument");
+      renderChips(arrayKey,containerId);saveToStorage();renderPrompt()
+    }
+
+    // Autocomplete
+    function setupAutocomplete(inputId,acId,suggestions){
+      const input=document.getElementById(inputId);
+      const ac=document.getElementById(acId);
+      let acIndex=-1;
+      input.addEventListener("input",()=>{
+        const val=input.value.trim().toLowerCase();
+        if(!val){ac.style.display="none";return}
+        const matches=suggestions.filter(s=>s.toLowerCase().includes(val)&&!state[inputId==="newFusionGenre"?"fusionGenres":"instruments"].includes(s)).slice(0,8);
+        if(!matches.length){ac.style.display="none";return}
+        acIndex=-1;
+        ac.innerHTML=matches.map(m=>{
+          const idx=m.toLowerCase().indexOf(val);
+          const highlighted=m.slice(0,idx)+"<mark>"+m.slice(idx,idx+val.length)+"</mark>"+m.slice(idx+val.length);
+          return`<div data-val="${escapeHtml(m)}">${highlighted}</div>`
+        }).join("");
+        ac.style.display="block";
+        ac.querySelectorAll("div").forEach(div=>{div.addEventListener("mousedown",e=>{e.preventDefault();input.value=div.dataset.val;ac.style.display="none";addChip(inputId==="newFusionGenre"?"fusionGenres":"instruments",inputId,inputId==="newFusionGenre"?"fusionGenresChips":"instrumentsChips")})})
+      });
+      input.addEventListener("keydown",e=>{
+        const items=ac.querySelectorAll("div");
+        if(e.key==="ArrowDown"){e.preventDefault();acIndex=Math.min(acIndex+1,items.length-1);items.forEach((el,i)=>el.classList.toggle("ac-active",i===acIndex));if(items[acIndex])input.value=items[acIndex].dataset.val}
+        else if(e.key==="ArrowUp"){e.preventDefault();acIndex=Math.max(acIndex-1,-1);items.forEach((el,i)=>el.classList.toggle("ac-active",i===acIndex));if(acIndex>=0&&items[acIndex])input.value=items[acIndex].dataset.val}
+        else if(e.key==="Escape"){ac.style.display="none"}
+      });
+      document.addEventListener("click",e=>{if(!input.contains(e.target)&&!ac.contains(e.target)){ac.style.display="none"}});
+    }
+
+    function hideAutocomplete(acId){const ac=document.getElementById(acId);if(ac)ac.style.display="none"}
+
+    // Build prompt — v5.5 four-layer architecture (comma-separated tokens)
+    // Layer 1: Skeleton (genre, BPM, key, era, mode)
+    // Layer 2: Sound palette (instruments, texture, atmosphere)
+    // Layer 3: Vocal direction
+    // Layer 4: Negative constraints (no X, no Y)
+    function buildPromptWithTracking(){
+      const c=v=>String(v||"").trim();
+      const tok=v=>v.replace(/[.!?]+$/,"").trim(); // strip trailing punctuation for comma-flow
+      const maxChars=1000;
+
+      // Helpers to translate values to clean English tokens
+      const txEnergy={"bajo":"slow energy","medio":"mid energy","alto":"high energy","agresivo":"aggressive energy","cinematográfico":"cinematic energy"};
+      const txCreativity={"muy controlada":"tightly controlled","controlada":"controlled","media":"moderately free","experimental":"experimental"};
+      const txInfluence={"muy alto":"dominant audio reference","alto":"strong audio reference","medio":"moderate audio reference","bajo":"light audio reference"};
+
+      // ── LAYER 1: Skeleton ──────────────────────────────────────────────────
+      const l1Parts=[];
+      // Genre + fusions
+      const genreFusion=[state.genre,...state.fusionGenres].filter(Boolean);
+      l1Parts.push(genreFusion.join(", "));
+      // BPM
+      if(state.bpm) l1Parts.push(`${state.bpm} BPM`);
+      // Key
+      if(state.key) l1Parts.push(state.key);
+      // Era
+      if(state.eraYear) l1Parts.push(`${state.eraYear} era`);
+      // Sub-style texture (part of skeleton)
+      if(c(state.subStyle)) l1Parts.push(tok(c(state.subStyle)));
+      // Energy
+      if(txEnergy[state.referenceEnergy]) l1Parts.push(txEnergy[state.referenceEnergy]);
+
+      // ── LAYER 2: Sound palette ─────────────────────────────────────────────
+      const l2Parts=[];
+      // Instruments
+      if(state.instruments.length) l2Parts.push(...state.instruments.map(tok));
+      // Percussion mode
+      if(state.percussionMode==="Sin percusión / solo melodía") l2Parts.push("no drums", "no percussion");
+      // Atmosphere
+      if(c(state.atmosphere)) l2Parts.push(tok(c(state.atmosphere)));
+      // Mood
+      if(c(state.mood)) l2Parts.push(tok(c(state.mood)));
+      // Mix direction
+      if(c(state.mixDirection)) l2Parts.push(tok(c(state.mixDirection)));
+      // Creativity / audio influence
+      if(txCreativity[state.creativity]) l2Parts.push(txCreativity[state.creativity]);
+      if(txInfluence[state.audioInfluence]) l2Parts.push(txInfluence[state.audioInfluence]);
+
+      // ── LAYER 3: Vocal direction ───────────────────────────────────────────
+      const l3Parts=[];
+      const vocalMap={"Solo instrumental":"instrumental only, no vocals","Solo chops vocales sutiles":"subtle vocal chops only","Voz de referencia para hook":"hook reference vocal","Voz guía rapeada":"rap guide vocal","Solo texturas vocales de fondo":"background vocal textures only"};
+      if(vocalMap[state.vocalOption]) l3Parts.push(vocalMap[state.vocalOption]);
+
+      // ── LAYER 4: Negative constraints ─────────────────────────────────────
+      const l4Parts=[];
+      // Parse avoid field into individual "no X" tokens
+      if(c(state.avoid)){
+        c(state.avoid).split(/,|;/).map(s=>s.trim()).filter(Boolean).forEach(item=>{
+          l4Parts.push(`no ${tok(item)}`)
+        })
+      }
+
+      // ── OPTIONAL modifiers (added only if space allows) ───────────────────
+      const optionalParts=[
+        {label:"Emoción",text:c(state.emotionIntent)?tok(c(state.emotionIntent)):""},
+        {label:"Estructura",text:c(state.structure)?`[${tok(c(state.structure))}]`:""},
+        {label:"Preservar",text:c(state.preserve)?`preserve: ${tok(c(state.preserve))}`:""},
+        {label:"Elementos a agregar",text:c(state.addElements)?`add: ${tok(c(state.addElements))}`:""},
+        {label:"Objetivo stems",text:c(state.stemGoal)?`stem goal: ${tok(c(state.stemGoal))}`:""},
+        {label:"Personalización",text:c(state.customInstruction)?tok(c(state.customInstruction)):""},
+        {label:"Notas finales",text:c(state.notes)?tok(c(state.notes)):""}
+      ];
+
+      // Assemble in layer order: L1 | L2 | L3 | L4
+      const mandatoryTokens=[...l1Parts,...l2Parts,...l3Parts,...l4Parts].filter(Boolean);
+      let tokens=[...mandatoryTokens];
+      const omitted=[];
+
+      // Try to fit optional tokens
+      for(const op of optionalParts){
+        if(!op.text) continue;
+        const candidate=[...tokens,op.text].join(", ");
+        if(candidate.length<=maxChars){tokens.push(op.text)}
+        else{omitted.push(op.label)}
+      }
+
+      // Final prompt: comma-separated, trimmed
+      let prompt=tokens.join(", ").replace(/\s+/g," ").trim();
+      // Hard truncate safety net
+      if(prompt.length>maxChars) prompt=prompt.slice(0,maxChars).replace(/,\s*$/,"").trim();
+
+      return{prompt,omitted}
+    }
+
+    function renderPrompt(){
+      const{prompt,omitted}=buildPromptWithTracking();
+      promptOutput.textContent=prompt;
+      const len=prompt.length;
+      charCounter.textContent=`${len}/1000 caracteres`;
+      charCounter.className="char-counter"+(len>900?" over":len>750?" warn":"");
+      if(omitted.length){
+        truncationWarning.classList.add("visible");
+        truncationDetail.textContent="Secciones excluidas: "+omitted.join(", ")+". Reducí el contenido de esas secciones para incluirlas."
+      }else{truncationWarning.classList.remove("visible")}
+      pushHistory(prompt)
+    }
+
+    // History
+    function pushHistory(prompt){
+      if(!prompt)return;
+      if(promptHistory.length&&promptHistory[0].text===prompt)return;
+      const ts=new Date().toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
+      promptHistory.unshift({text:prompt,time:ts});
+      if(promptHistory.length>8)promptHistory=promptHistory.slice(0,8);
+      saveToStorage();
+      renderHistory()
+    }
+
+    function renderHistory(){
+      if(!promptHistory.length){historyList.innerHTML=`<div class="empty-state">Todavía no se generaron prompts en esta sesión.</div>`;return}
+      historyList.innerHTML=promptHistory.map((item,i)=>`
+        <div class="history-item">
+          <div>
+            <div class="hist-text">${escapeHtml(item.text.slice(0,120))}${item.text.length>120?"…":""}</div>
+            <div class="hist-meta" style="margin-top:4px">${item.time} · ${item.text.length} chars</div>
+          </div>
+          <button class="hist-copy" data-i="${i}" type="button">Copiar</button>
+        </div>`).join("");
+      historyList.querySelectorAll(".hist-copy").forEach(btn=>{
+        btn.addEventListener("click",async e=>{
+          e.stopPropagation();
+          const text=promptHistory[Number(btn.dataset.i)].text;
+          try{await navigator.clipboard.writeText(text)}catch(err){const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}
+          showToast("Prompt copiado del historial")
+        })
+      })
+    }
+
+    // Presets
+    function renderPresets(){
+      const presets=loadPresets();
+      const keys=Object.keys(presets);
+      if(!keys.length){presetList.innerHTML=`<div class="empty-state" style="padding:8px 0;text-align:left">Sin presets guardados todavía.</div>`;return}
+      presetList.innerHTML=keys.map(name=>`
+        <span class="preset-item" data-name="${escapeHtml(name)}">
+          <span class="load-preset" style="cursor:pointer">${escapeHtml(name)}</span>
+          <button class="del-preset" data-name="${escapeHtml(name)}" type="button" title="Eliminar">×</button>
+        </span>`).join("");
+      presetList.querySelectorAll(".load-preset").forEach(el=>{
+        el.addEventListener("click",()=>{
+          const presets=loadPresets();const name=el.closest(".preset-item").dataset.name;
+          if(presets[name]){state=Object.assign({},initialState,presets[name]);applyStateToDOM();saveToStorage();renderPrompt();showToast(`Preset "${name}" cargado`)}
+        })
+      });
+      presetList.querySelectorAll(".del-preset").forEach(btn=>{
+        btn.addEventListener("click",e=>{
+          e.stopPropagation();const presets=loadPresets();delete presets[btn.dataset.name];savePresets(presets);renderPresets();showToast("Preset eliminado")
+        })
+      })
+    }
+
+    function applyStateToDOM(){
+      selectFields.forEach(field=>{const el=document.getElementById(field.key);if(el)el.value=state[field.key]||""});
+      fineFields.forEach(field=>{const el=document.getElementById(field.key);if(el)el.value=state[field.key]||field.options[0]});
+      ["bpm","key","eraYear"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=state[id]||""});
+      const ci=document.getElementById("customInstruction");if(ci)ci.value=state.customInstruction||"";
+      renderChips("fusionGenres","fusionGenresChips");
+      renderChips("instruments","instrumentsChips")
+    }
+
+    function showToast(msg="Prompt copiado"){
+      toast.textContent=msg;toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"),1800)
+    }
+
+    async function copyPrompt(){
+      const{prompt}=buildPromptWithTracking();
+      try{await navigator.clipboard.writeText(prompt)}catch(err){const t=document.createElement("textarea");t.value=prompt;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}
+      showToast("Prompt copiado")
+    }
+
+    function resetApp(){
+      state=JSON.parse(JSON.stringify(initialState));
+      applyStateToDOM();saveToStorage();renderPrompt();showToast("Preset Boom Bap cargado")
+    }
+
+    function bindSimpleInputs(){
+      ["bpm","key","eraYear"].forEach(id=>{
+        const element=document.getElementById(id);
+        element.value=state[id]||"";
+        element.addEventListener("change",event=>{state[id]=event.target.value;saveToStorage();renderPrompt()})
+      });
+      const ci=document.getElementById("customInstruction");
+      ci.value=state.customInstruction;
+      ci.addEventListener("input",event=>{state.customInstruction=event.target.value;saveToStorage();renderPrompt()})
+    }
+
+    function bindChipInputs(){
+      document.getElementById("addFusionGenre").addEventListener("click",()=>{addChip("fusionGenres","newFusionGenre","fusionGenresChips")});
+      document.getElementById("addInstrument").addEventListener("click",()=>{addChip("instruments","newInstrument","instrumentsChips")});
+      [["newFusionGenre","fusionGenres","fusionGenresChips"],["newInstrument","instruments","instrumentsChips"]].forEach(([inputId,arrayKey,containerId])=>{
+        document.getElementById(inputId).addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();addChip(arrayKey,inputId,containerId)}})
+      })
+    }
+
+    function bindPresets(){
+      document.getElementById("savePresetBtn").addEventListener("click",()=>{
+        const nameInput=document.getElementById("presetNameInput");
+        const name=nameInput.value.trim();
+        if(!name){showToast("Escribe un nombre para el preset");return}
+        const presets=loadPresets();presets[name]=JSON.parse(JSON.stringify(state));savePresets(presets);nameInput.value="";renderPresets();showToast(`Preset "${name}" guardado`)
+      });
+      document.getElementById("presetNameInput").addEventListener("keydown",e=>{if(e.key==="Enter"){document.getElementById("savePresetBtn").click()}})
+    }
+
+    function init(){
+      loadFromStorage();
+      renderSelects();
+      renderFineSelects();
+      bindSimpleInputs();
+      bindChipInputs();
+      renderChips("fusionGenres","fusionGenresChips");
+      renderChips("instruments","instrumentsChips");
+      setupAutocomplete("newFusionGenre","acFusion",GENRE_SUGGESTIONS);
+      setupAutocomplete("newInstrument","acInstrument",INSTRUMENT_SUGGESTIONS);
+      document.getElementById("copyBtn").addEventListener("click",copyPrompt);
+      document.getElementById("resetBtn").addEventListener("click",resetApp);
+      bindPresets();
+      renderPresets();
+      renderHistory();
+      renderPrompt()
+    }
+
+    init();
   </script>
 </body>
 </html>
